@@ -12,27 +12,201 @@
 
 .cuadroregistro{
 
-    width: 50%;
-    height: 350px;
-    
+    position: relative;
+    width: 60%;
+    height: 450px;
     border-radius: 8px;
     background-color: #1c1b1d;
     display: flex;
     justify-content: center;
-    box-shadow: 0 0 35px #68686b;
+    box-shadow:  0 0 15px #6ec7ec;
     
 }
+
+
+.ventana_geolink{
+    width: 100%;
+    height: 100dvh;
+}
+
+.textobienvenida{
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    margin-top: 45px;
+    font-size: 25px;
+}
+.spiner{
+    color: #6ec7ec !important;
+    width: 100px !important;
+    height: 100px !important;
+
+}
+
 
 .cuadro50porcen{
 
     width: 50%;
+    align-content: center;
 
 }
+.cuadro50porcen_oculta{
 
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    background-color: #1c1b1d;
+    z-index: 2;
+    box-shadow: 0 0 15px #6ec7ec;
+    border-radius: 8px 0px 0px 8px;
+    transition: left 3s ease;
+
+}
+.cuadro50porcen_izq{
+
+    left: 0%;
+    background-color: #1c1b1d;
+    border-radius: 8px 0px 0px 8px;
+    transition: left 0.5s ease;
+ 
+}
+.cuadro50porcen_dre{
+
+    left: 50%;
+    background-color: #1c1b1d;
+    border-radius: 0px 8px 8px 0px;
+    transition: left 0.5s ease;
+    
+
+}
 .bod {
 
     margin: 0;
     min-height: 100vh;
     background: #1c1b1de5;
     
+}
+.bod1 {
+
+    margin: 0;
+    min-height: 50vh;
+    background: #1c1b1d;
+    padding: 0px;
+    margin-left: -10px;
+    
+}
+
+
+.vinculos{
+    color: #6ec7ec;
+    cursor: pointer;
+    width: auto;
+}
+.btn_ingreso{
+    background-color:#333234 ;
+    box-shadow: 0 0 5px white;
+    width: 50%;
+    height: 40px;
+    border-radius: 8px;
+    color: #6ec7ec;
+    
+}
+
+.ordenlogo{
+    display: flex;
+    gap: 25px;
+}
+
+
+/* consulta pagina de consulta */
+
+
+.conversioncuadro_cuadrobienvenida{
+
+    position: relative;
+    margin-top: 0;
+    margin-left: 0;
+    height: 80px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: #1c1b1d;
+    display: flex;
+    padding: 10px 0px 10px 25px;
+    padding-left: 1%;
+    box-shadow:  0 0 15px #6ec7ec;
+    transform: translate(20px,0);
+    border-radius: 0;
+    
+}
+.conversioncuadro_cuadrobienvenida_icono #geolinkimg{
+
+    width: 4dvh;
+    transform: translate(0,0);
+    border-radius: 0;
+    
+}
+
+.bienvenida{
+    
+    position: relative;
+    width: 60%;
+    height: 60dvh;
+    margin-top: 20dvh;
+    margin-left: 40dvh;
+    border-radius: 8px;
+    background-color: #1c1b1d;
+    display: flex;
+    padding-left: 22%;
+    box-shadow:  0 0 15px #6ec7ec;
+   
+    
+}
+.transicion{
+    transition: all 2s ease;
+}
+
+/*Cuadro de informacion para la consulta */
+
+.cuadroprincipal{
+    margin-top: 5px;
+    width: 100%;
+    height: 500px;
+    opacity: 0%;
+    
+    
+}
+
+.cuadro_consultas{
+    margin-top: 20px;
+    width: 90%;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px #6ec7ec;
+}
+.cuadro_mapas{
+    margin-top: 20px;
+    width: 98%;
+    height: 96%;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px #6ec7ec;
+}
+.cuadroseleccion{
+    display: flex;
+    gap: 8px;
+}
+.linea{
+    border: solid 2px;
+    border-color: white;
+    box-shadow: 0 0 15 white;
+}
+
+.cuadro{
+    background: white;
+    padding: 2px 5px 2px 10px;
+    border-radius: 8px;
+    height: 30px;
+    width: 100%;
 }
