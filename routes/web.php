@@ -20,9 +20,20 @@ Route::get('/welcome', function () {
 })->name('welcome');
 
 
+// rutas para interaccion con bases de datos 
 
 Route::post('/registro_usuario',
     [UsuarioController::class,'guardar']
+);
+
+Route::post('/existente',
+    [UsuarioController::class,'consultausuario']
+);
+Route::post('/acceso',
+    [UsuarioController::class,'accesousuario']
+);
+Route::get('/geolink',
+    [UsuarioController::class,'consultalocalidades']
 );
 
 

@@ -15,7 +15,7 @@
     
 
     <div style="display: flex; justify-content: center; margin-top: 10%;">
-        <div class="cuadroregistro">
+        <div class="cuadroregistro" id="cuadroderegistro">
             <div class="cuadro50porcen"><!--INGRESO-->
                 <div style="width: 90%; justify-items: center;">
                     <div style="width: 80%">
@@ -35,7 +35,7 @@
                     </div>
                     <div style = "display:flex; gap:5px; width: 80%;">
                         <div style="width: 70%;">
-                            <p class="vinculos">Olviste tu contrase</p>
+                            <p class="vinculos">Olvidaste tu contraseña</p>
                         </div>
                         <div style="width: 30%;">
                         <p id='registro' class="vinculos"> Registrate</p>
@@ -111,20 +111,103 @@
 
 <script>
 
+
 $('#btnregistro').click(function (){
 
+    const correo = $('#correo_usuario').val();
+
+    $.ajax({
+
+        url:'/existente',
+        method: 'POST',
+        data:{
+
+            correo: correo,
+        
+            _token:$('meta[name="csrf-token"]').attr('content')
+        },
+
+        success:function(respuesta){
+            console.log(respuesta.mensaje);
+           if(respuesta.existe){
+                alert('Usuario ya registrado en GEOLINK')
+           }else{
+                
+                console.log('Creacion de usuario en proceso.')
+                registro();
+                
+           }
+            
+        },
+        error:function(xhr){
+
+        alert(xhr.responseText);
+
+        }
+
+    });
+
+
+
+});
+
+
+$('#acceso').click(function (){
+
+    const usuario = $('#usuario').val();
+    const password = $('#Password').val();
+
+    $.ajax({
+
+        url:'/acceso',
+        method: 'POST',
+        data:{
+
+            usuario:usuario,
+            password:password,
+
+            _token:$('meta[name="csrf-token"]').attr('content')
+
+
+        },
+        success:function(response){
+            if(response.existe){
+                    console.log('Usuario existente Acceso permitido')
+                     window.location.href = '/geolink';
+            }else{
+                alert('Usuario no registrado en GEOLINK')
+            }
+
+        }
+
+
+    });
+
+});
+
+
+
+function registro(){    
+
     const nombre = $('#Nombre_usuario').val()
+    const usuariocreado = $('#usuario');
     const correo = $('#correo_usuario').val()
     const contrasenia1 = $('#Password_usuario').val()
     const contrasenia2 = $('#Password_verificado').val()
 
+    
     if(contrasenia1.length < 8){
-        alert('Contraseña debe tener almenos 8 caracteres')
+        alert('Contraseña debe tener al menos 8 caracteres')
         return;
     }
 
+    if(!correo.includes('@') || !(correo.includes('.com') || correo.includes('.co'))){
+        alert('Correo Electrónico no valido')
+        return
+    }
+
     if(contrasenia1 != contrasenia2){
-        alert('Contraseña no valida');
+        alert('Verificación de contraseña NO coinciden');
         return;
     }
 
@@ -141,6 +224,15 @@ $('#btnregistro').click(function (){
         },
         success:function(respuesta){
             alert('Usuario registrado con exito');
+
+            $('#cuadrooculta').addClass('cuadro50porcen_dre');
+            $('#cuadrooculta').removeClass('cuadro50porcen_izq');
+            usuariocreado.val($('#Nombre_usuario').val());
+            $('#correo_usuario').val('');
+            $('#Nombre_usuario').val('');
+            $('#Password_usuario').val('');
+            $('#Password_verificado').val('');
+            
         },
         error:function(error){
             alert('Error en registro de usuario '+ error)
@@ -152,7 +244,7 @@ $('#btnregistro').click(function (){
         }
     });
 
-});
+}
 
 
 

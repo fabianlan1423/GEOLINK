@@ -11,17 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-       
-
-        Schema::create('registro_users', function (Blueprint $table) {
-            
-            $table->id();
-            $table->text('nombre');
-            $table->text('correo');
-            $table->text('contraseña');
-        });
-
-        
+        //
     }
 
     /**
@@ -29,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registro_users');
+        //
     }
 };

@@ -114,6 +114,17 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'conexion_osp' => [
+
+            'driver' => env('DB_CONNECTION2'),
+            'host' => env('DB_HOST2'),
+            'port' => env('DB_PORT2'),
+            'database' => env('DB_DATABASE2'),
+            'username' => env('DB_USERNAME2'),
+            'password' => env('DB_PASSWORD2'),
+
+        ],
+
     ],
 
     /*

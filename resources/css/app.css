@@ -42,6 +42,11 @@
     height: 100px !important;
 
 }
+#map{
+    
+    height:500px;
+
+}
 
 
 .cuadro50porcen{
@@ -82,7 +87,7 @@
 
 }
 .bod {
-
+    margin-left: 15px;
     margin: 0;
     min-height: 100vh;
     background: #1c1b1de5;
@@ -95,6 +100,8 @@
     background: #1c1b1d;
     padding: 0px;
     margin-left: -10px;
+    text-align: center;
+    justify-items: center;
     
 }
 
@@ -209,4 +216,8 @@
     border-radius: 8px;
     height: 30px;
     width: 100%;
+}
+
+.cuadrogeneral{
+    width: 90%;
 }
