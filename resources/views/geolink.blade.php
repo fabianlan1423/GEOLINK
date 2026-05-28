@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -17,6 +18,7 @@
 <body class="bod1">
     <div class='cuadrogeneral'>
         <div id="cuadropincipal2" class="transicion bienvenida">
+
             <div class="transicion" id="cuadrobienvenida" style="align-content: center; margin-left: 20px;">
                 <div class="ordenlogo">
                     <div style="align-content: center;">
@@ -26,7 +28,7 @@
                         <h2 style="color: white; font-weight: 600;">GEOLIK</h2>
                     </div>
                 </div>
-                <div>
+                <div style="   text-align-last: start;">
                     <p id="letbienvenida2" class= "transicion textobienvenida">Network Path Discovery</p>
                 </div>
                 <div id="letbienvenida1" style="text-align: center; margin-top: 35px;">
@@ -37,9 +39,23 @@
                 <div id="letbienvenida" style="text-align: center; margin-top: 15px; font-size: 20px; color: white; font-weight: 600;">
                     <p>Bienvenido</p>
                 </div>
+                
+            </div>
+            <div  id="menuprincipal" class="transicion" style="display: flex; gap: 35px; opacity: 0%; ">
+                <div style="align-content: center;">
+                    <p id="captura" class="titulos_menu">Captura</p>
+                </div>
+                <div style="align-content: center; margin-right: 15px;">
+                    <p id="salir" class="titulos_menu">Salir</p>
+                </div>
+               <!-- <div style="align-content: center;">
+                    <a href="https://cdstorage.co/"><img class="transicion" style="width: 0px;" id="CDS" src="{{ asset('img/CDS_GEOLINK.png')}}" alt="geolinkimg" style="width: 90px;"></a>
+                </div> -->
+                
             </div>
             
         </div>
+
         <div id="cuadropincipalinfo" class="transicion cuadroprincipal">
             <div style="width:100%; margin-left: 35px; display:flex;">
                 <div style="width:25%;"><!--cuadro consultas-->
@@ -103,23 +119,25 @@
             </div>
             <br>
             <hr class="linea">
-            <div> <!--Tabla De Respuestas-->
-                    <table>
+            <div style=" width: 100%; justify-items: center;"> <!--Tabla De Respuestas-->
+                    <table id="tbrespuesta" style="width: 100%;">
                         <thead>
                             <tr>
-                                <td></td>
-                                <td>ESTADO</td>
-                                <td>ID</td>
-                                <td>CTO/EMP</td>
-                                <td>PUERTOS</td>
-                                <td>DISTANCIA</td>
-                                <td>OLT</td>
-                                <td>NODO</td>
+                                <th>VER</th>
+                                <th>COORDENADAS</th>
+                                <th>ID_CTO</th>
+                                <th>DESTINO</th>
+                                <th>DIRECCION ASOCIADA</th>
+                                <th>DIST</th>
+                                <th>COINVERSOR</th>
+                                <th title="PUERTOS DISPONIBLES">PD</th>
+                                <th>OLT</th>
+                                <th>CONSULTA</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
+                            <!--<tr>
+                                <td> <input type="checkbox" id="" value=""> </td>
                                 <td>2</td>
                                 <td>3</td>
                                 <td>4</td>
@@ -127,7 +145,7 @@
                                 <td>6</td>
                                 <td>7</td>
                                 <td>8</td>
-                            </tr>
+                            </tr>-->
                         </tbody>
                         
                     </table>
@@ -148,26 +166,356 @@
             attribution: 'OpenStreetMap'
         }).addTo(map);
 
+       
     $('#consultacoordenadas').click(function(){
-        ruta();
+
+        const direcc = $('#direccion').val();
+        const lat = $('#latitud').val();
+        const long = $('#longitud').val();
+
+        limpiezarespuesta();
+        
+        if(!lat && !long && !direcc){
+            alert('Ingrese datos de Coordenadas o Direccion para proceso GEOLIK')
+        }
+       
+
+        if(lat && long && !direcc){
+            consultacoordenada();
+            creaciongeom();
+            zc();
+            za();
+            emp();
+          
+        }
+        if(lat && long && direcc){
+            alert('Proceso prioriza busqueda por COORDENADAS')
+            $('#direccion').val('');
+            consultacoordenada();
+            creaciongeom();
+            zc();
+            za();
+            emp();
+           
+        }
+
+        if(direcc && !lat && !long){
+            consultacoordenada();
+            creaciongeom();
+            direccion();
+        }
+
+
+        
+        
+        
 
     });
 
+
+    function limpiezarespuesta(){
+
+        
+        
+        $.ajax({
+           
+            url:'/limpiezatbrespuesta',
+            type: 'POST',
+            data: {
+                 _token:$('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(response){
+                alert(response.mensaje)
+                console.log(response)
+            },
+            error:function(xhr){
+
+                console.log(xhr.responseText);
+
+                alert(xhr.responseText);
+
+            }
+        });
+ 
+    }
+    function consultacoordenada(){
+
+        const latitud = $('#latitud').val()
+        const longitud = $('#longitud').val()
+        const direccion = $('#direccion').val()
+        const localidad = $('#localidad').val()
+        
+        $.ajax({
+           
+            url:'/datosconsulta',
+            type: 'POST',
+            data: {
+                id_pre:'1',
+                latitud: latitud,
+                longitud: longitud,
+                direccion: direccion,
+                localidad: localidad,
+                
+
+                 _token:$('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(response){
+                alert(response.mensaje)
+                console.log(response)
+            },
+            error:function(xhr){
+
+                console.log(xhr.responseText);
+
+                alert(
+                    'Error cargando coordenadas de consulta\n\n' +
+                    xhr.responseText
+                );
+
+            }
+            
+        });
+ 
+    }
+    function creaciongeom(){
+        $.ajax({
+
+            url:'/geom',
+            type:'POST',
+            data:{
+                _token:$('meta[name="csrf-token"]').attr('content')
+             },
+
+             success:function(response){
+                alert(response.mensaje);
+             }
+
+        });
+    }
+    function direccion(){
+
+        $.ajax({
+
+            url:'/pordireccion',
+            type:'POST',
+            data:{
+                _token:$('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(response){
+                let html = '';
+
+                response.data.forEach(function(item){
+
+                    html += `
+                        <tr>
+                            <td></td>
+                            <td>${item.coordenadas}</td>
+                            <td>${item.id_cto1}</td>
+                            <td>${item.op1cto}</td>
+                            <td>${item.direccion_cli}</td>
+                            <td>0</td>
+                            <td>${item.op1feeder}</td>
+                            <td>${item.op1dipscto}</td>
+                            <td>${item.op1olt}</td>
+                            <td>${item.grupo_cto}</td>
+                            
+                        </tr>
+                    `;
+
+                });
+
+                $('#tbrespuesta tbody').html(html);
+            }
+
+        });
+
+    }
+
+    function zc(){
+
+        $.ajax({
+
+            url:'/zc',
+            type:'POST',
+            data: {
+                  _token:$('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(response){
+                let html = '';
+
+                response.data.forEach(function(item){
+
+                    html += `
+                        <tr>
+                            <td>
+                                <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
+                            </td>
+                            <td>${item.coordenadas}</td>
+                            <td>${item.id_cto1}</td>
+                            <td>${item.op1cto}</td>
+                            <td>${item.direccion_cli}</td>
+                            <td>${item.op1distanciacto}</td>
+                            <td>${item.op1feeder}</td>
+                            <td>${item.op1dipscto}</td>
+                            <td>${item.op1olt}</td>
+                            <td>${item.grupo}</td>
+                            
+                        </tr>
+                    `;
+
+                });
+
+                $('#tbrespuesta tbody').html(html);
+            }
+
+        });
+
+    }
+
+    function emp(){
+
+        $.ajax({
+
+            url:'/emp',
+            type:'POST',
+            data:{
+
+                _token:$('meta[name="csrf-token"]').attr('content') 
+            },
+            success:function(response){
+                    let html = '';
+
+                    response.data.forEach(function(item){
+
+                        html += `
+                            <tr>
+                                <td>
+                                    <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
+                                </td>
+                                <td>${item.coordenadas}</td>
+                                <td>${item.idemp}</td>
+                                <td>${item.empalme}</td>
+                                <td>${item.puertos}</td>
+                                <td>${item.distancia}</td>
+                                <td>${item.feeder}</td>
+                                <td>${item.puertos}</td>
+                                <td>${item.puertos}</td>
+                                <td>${item.consultaemp}</td>
+                                
+                            </tr>
+                        `;
+
+                    });
+
+                    $('#tbrespuesta tbody').append(html);
+                }
+
+            });
+
+    }
     
-    function ruta(){
+    function za(){
+
+        $.ajax({
+
+            url:'/za',
+            type:'POST',
+            data:{
+
+                _token:$('meta[name="csrf-token"]').attr('content') 
+            },
+            success:function(response){
+                    let html = '';
+
+                    response.data.forEach(function(item){
+
+                        html += `
+                            <tr>
+                                <td>
+                                    <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
+                                </td>
+                                <td>${item.coordenadas}</td>
+                                <td>${item.id_cto1}</td>
+                                <td>${item.op1cto}</td>
+                                <td>${item.direccion_cli}</td>
+                                <td>${item.op1distanciacto}</td>
+                                <td>${item.op1feeder}</td>
+                                <td>${item.op1dipscto}</td>
+                                <td>${item.op1olt}</td>
+                                <td>${item.grupo}</td>
+                                
+                            </tr>
+                        `;
+
+                    });
+
+                    $('#tbrespuesta tbody').append(html);
+                }
+
+            });
+
+    }
+    
+    let rutas = {};
+
+    function ruta(checkbox){
+        const id = $(checkbox).val();
+
+        if(!$(checkbox).is(':checked')){
+
+            if(rutas[id]){
+
+                map.removeLayer(rutas[id].routeLayer);
+
+                map.removeLayer(rutas[id].markerOrigen);
+
+                map.removeLayer(rutas[id].markerDestino);
+
+                delete rutas[id];
+
+            }
+
+            return;
+
+        }
 
         const latitud =  parseFloat($('#latitud').val());
         const longitud =  parseFloat($('#longitud').val());
-
-      
         
-       
+
+         const coordenada = $(checkbox).val();
+
+        console.log(coordenada);
+
+        if(!coordenada){
+
+            console.error('coordenada vacia');
+            return;
+
+        }
+
+        const partes = coordenada.split(',');
+
+        console.log(partes);
+
+        if(partes.length < 2){
+
+            console.error('Formato invalido');
+            return;
+
+        }
+
+        const lng = parseFloat(partes[0].trim());
+        const lat = parseFloat(partes[1].trim());
+        const destino = partes[2].trim();
+
+        console.log(lng, lat);
         
         
         // ==========================
         // 2. CAPA DE RUTA
         // ==========================
-        let routeLayer;
+        
 
         const startIcon = L.icon({
             iconUrl: 'https://png.pngtree.com/png-clipart/20250102/original/pngtree-3d-location-icon-vector-clipart-for-maps-and-apps-png-image_18740250.png',
@@ -181,13 +529,21 @@
             iconAnchor: [20, 36]
         });
 
-        L.marker([4.6973228, -74.0696999], { icon: startIcon })
+        const markerOrigen = L.marker([lat, lng], { icon: startIcon })
             .addTo(map)
-            .bindPopup("Inicio");
+            .bindTooltip(destino, {
+                permanent:true,
+                direction:'left',
+                className:'toolconexion'
+            });
 
-        L.marker([latitud, longitud], { icon: endIcon })
+         const markerDestino = L.marker([latitud, longitud], { icon:endIcon })
+
             .addTo(map)
-            .bindPopup("Destino");
+            .bindTooltip('Cliente', {
+                permanent:false,
+                direction:'left'
+            });
         
         
         // ==========================
@@ -201,7 +557,8 @@
             },
             body: JSON.stringify({
                 coordinates: [
-                    [-74.0696999, 4.6973228],   // origen (lng, lat)
+                    //[-74.0696999, 4.6973228],   // origen (lng, lat)
+                    [lng, lat],
                     [longitud, latitud]    // destino (lng, lat)
                 ]
             })
@@ -213,16 +570,25 @@
             // ==========================
             // 4. DIBUJAR RUTA EN MAPA
             // ==========================
-            if (routeLayer) {
-                map.removeLayer(routeLayer);
-            }
         
-            routeLayer = L.geoJSON(data, {
-                style: {
-                    color: 'red',
-                    weight: 3
+            const routeLayer = L.geoJSON(data, {
+
+                style:{
+
+                    color:'red',
+                    weight:3
+
                 }
+
             }).addTo(map);
+            
+            rutas[id] = {
+
+                routeLayer,
+                markerOrigen,
+                markerDestino
+
+            };
         
         
             // ==========================
@@ -258,7 +624,6 @@
             console.error("Error al generar ruta:", err);
         });
     }
-        
     </script>
 
 <script>
@@ -290,6 +655,10 @@ setTimeout(() => {
     $('#geolinkimg').css('width','4dvh')
     $('.textobienvenida').css('margin-top','0px')
     $('#letbienvenida2').css('font-size','1dvh')
+    $('#CDS').css('width','170px');
+    $('#cuadrobienvenida').css('width','85%');
+    $('#menuprincipal').css('opacity','100%')
+  
    
     
    

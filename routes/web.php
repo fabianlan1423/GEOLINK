@@ -35,5 +35,29 @@ Route::post('/acceso',
 Route::get('/geolink',
     [UsuarioController::class,'consultalocalidades']
 );
+Route::post('/limpiezatbrespuesta',
+    [UsuarioController::class,'lipiezatbpuntosencillo']
+);
+Route::post('/geom',
+    [UsuarioController::class,'creaciongeom']
+);
+Route::post('/datosconsulta',
+    [UsuarioController::class,'datoaconsultar']
+);
+Route::post('/pordireccion',
+    [UsuarioController::class,'consultapordireccion']
+);
+Route::post('/pordireccion',
+    [UsuarioController::class,'consultapordireccion']
+);
+Route::post('/zc',
+    [UsuarioController::class,'consultazc']
+);
+Route::post('/za',
+    [UsuarioController::class,'consultaza']
+);
+Route::post('/emp',
+    [UsuarioController::class,'consultaemp']
+);
 
 

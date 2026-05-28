@@ -125,6 +125,11 @@
     display: flex;
     gap: 25px;
 }
+.titulos_menu{
+        color: #6dc4e9;
+    font-weight: 700;
+    cursor: pointer;
+}
 
 
 /* consulta pagina de consulta */
@@ -144,7 +149,7 @@
     padding-left: 1%;
     box-shadow:  0 0 15px #6ec7ec;
     transform: translate(20px,0);
-    border-radius: 0;
+    border-radius: 0px 0px 10px 10px;
     
 }
 .conversioncuadro_cuadrobienvenida_icono #geolinkimg{
@@ -165,7 +170,7 @@
     border-radius: 8px;
     background-color: #1c1b1d;
     display: flex;
-    padding-left: 22%;
+    padding-left: 20%;
     box-shadow:  0 0 15px #6ec7ec;
    
     
@@ -184,6 +189,16 @@
     
     
 }
+
+#salir:hover{
+    transform: translatey(-5px);
+    transition: 0.5s ;
+}
+#captura:hover{
+    transform: translatey(-5px);
+    transition: 0.5s ;
+}
+
 
 .cuadro_consultas{
     margin-top: 20px;
@@ -220,4 +235,55 @@
 
 .cuadrogeneral{
     width: 90%;
+}
+
+
+/* estilos tabla */
+
+table{
+
+    border-collapse: separate;
+    border-spacing: 5px;
+    color: white;
+
+}
+
+th{
+
+    width: 120px;
+    height: 40px;
+    border: solid 2px #45a7ef;
+    border-radius: 8px;
+    background: #1f2937;
+    
+
+}
+
+td{
+
+    width: 120px;
+    height: 35px;
+    border: solid 2px #45a7ef;
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+th:first-child{
+
+    border-top-left-radius:15px;
+
+}
+
+th:last-child{
+
+    border-top-right-radius:15px;
+
+}
+.toolconexion{
+    font-size: 9px;
+    color: black;
+    font-weight: 600;
+    background: none;
+    margin-top: 10px;
 }
