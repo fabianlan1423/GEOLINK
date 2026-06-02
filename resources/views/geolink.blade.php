@@ -458,173 +458,263 @@
     
     let rutas = {};
 
-    function ruta(checkbox){
-        const id = $(checkbox).val();
+        function ruta(checkbox){
 
-        if(!$(checkbox).is(':checked')){
+            const id = $(checkbox).val();
 
-            if(rutas[id]){
-
-                map.removeLayer(rutas[id].routeLayer);
-
-                map.removeLayer(rutas[id].markerOrigen);
-
-                map.removeLayer(rutas[id].markerDestino);
-
-                delete rutas[id];
-
-            }
-
-            return;
-
-        }
-
-        const latitud =  parseFloat($('#latitud').val());
-        const longitud =  parseFloat($('#longitud').val());
-        
-
-         const coordenada = $(checkbox).val();
-
-        console.log(coordenada);
-
-        if(!coordenada){
-
-            console.error('coordenada vacia');
-            return;
-
-        }
-
-        const partes = coordenada.split(',');
-
-        console.log(partes);
-
-        if(partes.length < 2){
-
-            console.error('Formato invalido');
-            return;
-
-        }
-
-        const lng = parseFloat(partes[0].trim());
-        const lat = parseFloat(partes[1].trim());
-        const destino = partes[2].trim();
-
-        console.log(lng, lat);
-        
-        
-        // ==========================
-        // 2. CAPA DE RUTA
-        // ==========================
-        
-
-        const startIcon = L.icon({
-            iconUrl: 'https://png.pngtree.com/png-clipart/20250102/original/pngtree-3d-location-icon-vector-clipart-for-maps-and-apps-png-image_18740250.png',
-            iconSize: [40, 40],
-            iconAnchor: [20, 36]
-        });
-
-        const endIcon = L.icon({
-            iconUrl: 'https://png.pngtree.com/png-clipart/20250701/original/pngtree-green-eco-friendly-3d-location-pin-with-drop-shadow-png-image_21234206.png',
-            iconSize: [40, 40],
-            iconAnchor: [20, 36]
-        });
-
-        const markerOrigen = L.marker([lat, lng], { icon: startIcon })
-            .addTo(map)
-            .bindTooltip(destino, {
-                permanent:true,
-                direction:'left',
-                className:'toolconexion'
-            });
-
-         const markerDestino = L.marker([latitud, longitud], { icon:endIcon })
-
-            .addTo(map)
-            .bindTooltip('Cliente', {
-                permanent:false,
-                direction:'left'
-            });
-        
-        
-        // ==========================
-        // 3. LLAMADA A OPENROUTESERVICE
-        // ==========================
-        fetch('https://api.openrouteservice.org/v2/directions/foot-walking/geojson', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijg0ZDdiZmZlYjBhZDQ2MjI5YmU4ZTE4Mzc1YWIxMDA3IiwiaCI6Im11cm11cjY0In0=',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                coordinates: [
-                    //[-74.0696999, 4.6973228],   // origen (lng, lat)
-                    [lng, lat],
-                    [longitud, latitud]    // destino (lng, lat)
-                ]
-            })
-        })
-        
-        .then(res => res.json())
-        .then(data => {
-        
             // ==========================
-            // 4. DIBUJAR RUTA EN MAPA
+            // ELIMINAR RUTA
             // ==========================
-        
-            const routeLayer = L.geoJSON(data, {
+            if(!$(checkbox).is(':checked')){
 
-                style:{
+                if(rutas[id]){
 
-                    color:'red',
-                    weight:3
+                    map.removeLayer(rutas[id].routeLayer);
+
+                    map.removeLayer(rutas[id].markerOrigen);
+
+                    map.removeLayer(rutas[id].markerDestino);
+
+                    delete rutas[id];
 
                 }
 
-            }).addTo(map);
-            
-            rutas[id] = {
+                return;
+            }
 
-                routeLayer,
-                markerOrigen,
-                markerDestino
+            // ==========================
+            // COORDENADAS CLIENTE
+            // ==========================
+            const latitud = parseFloat($('#latitud').val());
 
-            };
-        
-        
+            const longitud = parseFloat($('#longitud').val());
+
             // ==========================
-            // 5. CENTRAR MAPA EN RUTA
+            // COORDENADAS DESTINO
             // ==========================
-            map.fitBounds(routeLayer.getBounds());
-        
-        
+            const coordenada = $(checkbox).val();
+
+            console.log(coordenada);
+
+            if(!coordenada){
+
+                console.error('coordenada vacia');
+
+                return;
+            }
+
+            const partes = coordenada.split(',');
+
+            console.log(partes);
+
+            if(partes.length < 3){
+
+                console.error('Formato invalido');
+
+                return;
+            }
+
+            const lng = parseFloat(partes[0].trim());
+
+            const lat = parseFloat(partes[1].trim());
+
+            const destino = partes[2].trim();
+
+            console.log("ORIGEN:", lng, lat);
+
+            console.log("DESTINO:", longitud, latitud);
+
             // ==========================
-            // 6. PANEL DE INSTRUCCIONES
+            // ICONOS
             // ==========================
-            let steps = data.features[0].properties.segments[0].steps;
-        
-            let totalDistance = data.features[0].properties.segments[0].distance;
-            let totalDuration = data.features[0].properties.segments[0].duration;
-        
-            let html = "<h6>Indicaciones de ruta</h6>";
-            html += `<p style="margin-left:15px; margin-right: 15px;"><b>Distancia:</b> ${(totalDistance / 1000).toFixed(2)} km</p>`;
-            html += `<p><b>Tiempo:</b> ${(totalDuration / 60).toFixed(0)} min</p>`;
-        /*  html += "<ol>";
-        
-            steps.forEach(step => {
-                html += `<li>${step.instruction} (${step.distance.toFixed(0)} m)</li>`;
+            const startIcon = L.icon({
+
+                iconUrl: 'https://png.pngtree.com/png-clipart/20250102/original/pngtree-3d-location-icon-vector-clipart-for-maps-and-apps-png-image_18740250.png',
+
+                iconSize: [40, 40],
+
+                iconAnchor: [20, 36]
+
             });
-        
-            html += "</ol>";*/
-        
-            document.getElementById("panel").innerHTML = html;
-        
-        })
-        
-        .catch(err => {
-            console.error("Error al generar ruta:", err);
-        });
-    }
-    </script>
+
+            const endIcon = L.icon({
+
+                iconUrl: 'https://png.pngtree.com/png-clipart/20250701/original/pngtree-green-eco-friendly-3d-location-pin-with-drop-shadow-png-image_21234206.png',
+
+                iconSize: [40, 40],
+
+                iconAnchor: [20, 36]
+
+            });
+
+            // ==========================
+            // MARCADORES
+            // ==========================
+            const markerOrigen = L.marker([lat, lng], {
+
+                icon: startIcon
+
+            }).addTo(map)
+
+            .bindTooltip(destino, {
+
+                permanent: true,
+
+                direction: 'left',
+
+                className: 'toolconexion'
+
+            });
+
+            const markerDestino = L.marker([latitud, longitud], {
+
+                icon: endIcon
+
+            }).addTo(map)
+
+            .bindTooltip('Cliente', {
+
+                permanent: false,
+
+                direction: 'left'
+
+            });
+
+            // ==========================
+            // FETCH LARAVEL
+            // ==========================
+            fetch('/ors/ruta', {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type': 'application/json',
+
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+                },
+
+                body: JSON.stringify({
+
+                    coordinates: [
+
+                        [lng, lat],
+
+                        [longitud, latitud]
+
+                    ]
+
+                })
+
+            })
+
+            .then(async res => {
+
+                const data = await res.json();
+
+                console.log('RESPUESTA API:', data);
+
+                if(!res.ok){
+
+                    throw new Error(
+                        data.error ||
+                        'Error al consultar ORS'
+                    );
+
+                }
+
+                return data;
+
+            })
+
+            .then(data => {
+
+               
+        console.log("DATA COMPLETA:", data);
+
+        if(!data.features){
+
+            console.error("No existen features");
+
+            console.log(data);
+
+            return;
+        }
+
+        console.log("FEATURES:", data.features);
+
+        console.log("GEOMETRY:", data.features[0].geometry);
+
+
+
+                // ==========================
+                // DIBUJAR RUTA
+                // ==========================
+                const routeLayer = L.geoJSON(data, {
+
+                    style: {
+
+                        color: 'red',
+
+                        weight: 5
+
+                    }
+
+                }).addTo(map);
+
+                rutas[id] = {
+
+                    routeLayer,
+
+                    markerOrigen,
+
+                    markerDestino
+
+                };
+
+                // ==========================
+                // CENTRAR MAPA
+                // ==========================
+                map.fitBounds(routeLayer.getBounds());
+
+                // ==========================
+                // INFORMACIÓN
+                // ==========================
+                let segmento = data.features[0].properties.segments[0];
+
+                let totalDistance = segmento.distance;
+
+                let totalDuration = segmento.duration;
+
+                let html = "<h6>Indicaciones de ruta</h6>";
+
+                html += `
+                    <p style="margin-left:15px; margin-right:15px;">
+                        <b>Distancia:</b>
+                        ${(totalDistance / 1000).toFixed(2)} km
+                    </p>
+                `;
+
+                html += `
+                    <p>
+                        <b>Tiempo:</b>
+                        ${(totalDuration / 60).toFixed(0)} min
+                    </p>
+                `;
+
+                document.getElementById("panel").innerHTML = html;
+
+            })
+
+            .catch(err => {
+
+                console.error("Error al generar ruta:", err);
+
+            });
+
+        }
+</script>
 
 <script>
 $(window).scrollTop(0);

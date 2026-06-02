@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RutaController;
 use Illuminate\Support\Facades\DB;
 
 /*Route::get('/', function () {
@@ -60,4 +61,34 @@ Route::post('/emp',
     [UsuarioController::class,'consultaemp']
 );
 
+Route::post('/ors/ruta', 
+    [RutaController::class, 'ruta']
+);
 
+
+
+
+use Illuminate\Support\Facades\Http;
+
+Route::get('/test-ors', function () {
+
+    try {
+
+        $response = Http::withoutVerifying()
+            ->timeout(20)
+            ->get('https://api.openrouteservice.org');
+
+        return [
+            'status' => $response->status(),
+            'body' => substr($response->body(), 0, 200)
+        ];
+
+    } catch (\Exception $e) {
+
+        return [
+            'error' => $e->getMessage()
+        ];
+
+    }
+
+});
