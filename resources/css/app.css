@@ -44,7 +44,7 @@
 }
 #map{
     
-    height:500px;
+    height: 450px;
 
 }
 
@@ -202,15 +202,17 @@
 
 .cuadro_consultas{
     margin-top: 20px;
+    height: 90%;
     width: 90%;
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 15px #6ec7ec;
+    margin-bottom: 15px;
 }
 .cuadro_mapas{
     margin-top: 20px;
     width: 98%;
-    height: 96%;
+    
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 15px #6ec7ec;
@@ -282,8 +284,106 @@ th:last-child{
 }
 .toolconexion{
     font-size: 9px;
-    color: black;
+    background-color: #1c1b1d;
+    color: rgb(255, 255, 255);
     font-weight: 600;
     background: none;
     margin-top: 10px;
+}
+
+.botonconsultadireccioncoordenada{
+    border: solid 1px;
+    background: #6464648f !important;
+    padding: 2px 10px 0px 10px;
+    border-radius: 8px 8px 0px 0px;
+    cursor: pointer;
+     transition: background 0.5s ease, transform 0.5s ease;
+}
+
+.botonconsultadireccioncoordenada:hover{
+    
+     transform: translatey(-5px);
+}
+
+.recuadros{
+    margin-top: 15px !important;
+    border-color: white !important;
+    padding: 8px !important;
+    height: 50%;
+    border-radius: 8px 8px 8px 8px !important;
+}
+
+.cuadro2{
+    position: fixed;
+    top: 100px;
+    left: 0;
+
+    width: 300px;
+    display: flex;
+
+    transform: translateX(-260px);
+    transition: transform 1.5s ease;
+
+    z-index: 1000;
+}
+
+.cuadro2vista{
+    transform: translateX(0);
+}
+.cuadro_selec{
+    width: 260px;
+    background: #2c3e50;
+    padding: 10px;
+}
+.mostrar_cuadro{
+    transform: translateX(200px);
+}
+
+.solapa{
+    width: 40px;
+    min-width: 40px;
+
+    background: #1f2937;
+    color: white;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vertical{
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    color: white;
+    margin: 0;
+}
+
+.cuadro_direcciones{
+    position: absolute;
+    width: 53%;
+    height: 65%;
+    background: #1f2937;
+    border-radius: 10px;
+    z-index: 9999;
+    display: none;
+    margin-left: 23%;
+
+}
+
+.miDiv{
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+    text-align: -webkit-center;
+}
+
+#datospordireccion th{
+        width: 220px;
+        background-color: #333234;
+        text-align: center;
+        border: solid 8px;
+        border-radius: 8px;
+        border-color: #1f2937 ;
 }

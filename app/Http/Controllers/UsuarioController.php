@@ -62,6 +62,10 @@ class UsuarioController extends Controller
             ->first();
 
         if($usuario && Hash::check($request->password, $usuario->contraseña)){
+
+            session([
+                'usuario' => $usuario->nombre
+            ]);
             
             return response()->json([
                 'existe' => true
@@ -73,10 +77,21 @@ class UsuarioController extends Controller
             ]);
         }
 
-           
-
-       
+        
     }
+
+    public function logout(Request $request){
+            session()->forget('usuario');
+
+            session()->invalidate();
+
+            session()->regenerateToken();
+
+            return response()->json([
+                'success' => true
+            ]);
+        }
+
     public function consultalocalidades(Request $request){
 
         $localidades = DB::connection('conexion_osp')
@@ -137,6 +152,26 @@ class UsuarioController extends Controller
                     ON b.localidad = c.ciudad
                 WHERE REPLACE(b.direccion_cli,' ','') = REPLACE(c.direccion,' ','')
                 LIMIT 1;");
+
+        return response()->json([
+            'data' => $data 
+            
+        ]);
+        
+
+       
+    }
+    
+   
+     public function consultadireccion(Request $request){
+        $valor = $request->valor;
+        
+        $data = DB::connection('conexion_osp')
+            ->select("select cto, localidad, direccion_cli
+                        from osp_3gys
+                        where cto like ?
+                        group by direccion_cli, localidad, cto
+                    ", ["%{$valor}%"]);
 
         return response()->json([
             'data' => $data 

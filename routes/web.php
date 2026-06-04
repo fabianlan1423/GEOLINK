@@ -64,6 +64,19 @@ Route::post('/emp',
 Route::post('/ors/ruta', 
     [RutaController::class, 'ruta']
 );
+Route::post('/consult_direccion', 
+    [UsuarioController::class, 'consultadireccion']
+);
+
+Route::post('/logout', function () {
+    session()->forget('usuario');
+    session()->invalidate();
+    session()->regenerateToken();
+
+    return response()->json([
+        'success' => true
+    ]);
+});
 
 
 

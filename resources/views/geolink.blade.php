@@ -16,6 +16,7 @@
     <title>GEOLIK CONSULTA</title>
 </head>
 <body class="bod1">
+    <input type="hidden" name="usuarioactual" id="usuarioactual">
     <div class='cuadrogeneral'>
         <div id="cuadropincipal2" class="transicion bienvenida">
 
@@ -25,7 +26,7 @@
                         <img class="transicion" id="geolinkimg" src="{{ asset('img/icono_geolink.png')}}" alt="geolinkimg" style="width: 90px;">
                     </div>
                     <div style="align-content: center;">
-                        <h2 style="color: white; font-weight: 600;">GEOLIK</h2>
+                        <h2 style="color: white; font-weight: 600;">GEOLINK</h2>
                     </div>
                 </div>
                 <div style="   text-align-last: start;">
@@ -42,9 +43,7 @@
                 
             </div>
             <div  id="menuprincipal" class="transicion" style="display: flex; gap: 35px; opacity: 0%; ">
-                <div style="align-content: center;">
-                    <p id="captura" class="titulos_menu">Captura</p>
-                </div>
+                
                 <div style="align-content: center; margin-right: 15px;">
                     <p id="salir" class="titulos_menu">Salir</p>
                 </div>
@@ -55,12 +54,33 @@
             </div>
             
         </div>
+        <div id="cuadrotabladirecciones" class="cuadro_direcciones">
+            <div>
+                <h2 style="margin-top: 25px; color: white;">DIRECCIONES ASICIADAS A CTO</h2>
+            </div>
+            <div>
+                <div class="miDiv">
+                    <table id="datospordireccion" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>CTO</th>
+                                <th>LOCALIDAD</th>
+                                <th>DIRECCION CLI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
 
         <div id="cuadropincipalinfo" class="transicion cuadroprincipal">
             <div style="width:100%; margin-left: 35px; display:flex;">
                 <div style="width:25%;"><!--cuadro consultas-->
                     <div class="cuadro_consultas">
-                        <div style="display: flex; gap: 10px;">
+                        <div style="display: none; gap: 10px;">
                             <div class="cuadroseleccion">
                                 <input type="checkbox" name="linkt1t2" id="linkt1t2" style="width: 18px;">
                                 <p style="color: white; margin-top: 10px; font-size:12px;">Link T1/T2</p>
@@ -75,55 +95,159 @@
                             </div>
                             
                         </div>
-                        
-                   
-                        <div>
-                            <p style="color:white;">Direccion</p>
+                        <hr>
+                        <div style="display: flex; gap: 10px;">
+                            <div id="btnbusquedaddireccion" class="botonconsultadireccioncoordenada"><!--direccion-->
+                                <p style="color: white;">Direccion</p>
+                            </div>
+                            <div id="btnbusquedadcoordenada" class="botonconsultadireccioncoordenada"><!--coordenada-->
+                                <p style="color: white;">Coordenada</p>
+                            </div>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="direccion" placeholder="Direccion">
-                            <label for="direccion">Direccion</label>
+                        <hr style="color: white; margin-top: -1px; border: solid 2px; border-radius: 8px;">
+                        <div id="busquedadireccion" style="display: none;" class="recuadros">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="direccion" placeholder="Direccion">
+                                <label for="direccion">Direccion</label>
+                            </div>
+                            <br>
+                            <select class="form-select form-select-lg mb-3" aria-label="Large select example" style="height: 59px;" id='localidad'>
+                                <option selected>Localidad</option>
+                                @foreach($localidades as $localidad)
+                                <option value="{{$localidad -> localidad}}">{{$localidad -> localidad}}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <br>
-                        <select class="form-select form-select-lg mb-3" aria-label="Large select example" id='localidad'>
-                            <option selected>Localidad</option>
-                             @foreach($localidades as $localidad)
-                             <option value="{{$localidad -> localidad}}">{{$localidad -> localidad}}</option>
-                             @endforeach
-                        </select>
-                        <br>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="latitud" placeholder="Latitud">
-                            <label for="latitud">Latitud</label>
-                        </div>
-                        <br>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="longitud" placeholder="Longitud">
-                            <label for="longitud">Longitud</label>
+                        <div id="busquedacoordenada" style="display: block;" class="recuadros">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="latitud" placeholder="Latitud">
+                                <label for="latitud">Latitud</label>
+                            </div>
+                            <br>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="longitud" placeholder="Longitud">
+                                <label for="longitud">Longitud</label>
+                            </div>
                         </div>
                         <br>
                         <div style="width: 100%; text-align: center;">
                             <input class="btn_ingreso" type="button" id="consultacoordenadas" value="CONSULTAR">
                         </div>
+                        
                     </div>
                     <div><!--Consulta Cordenedas-->
-
+                        <div><!--QUE ESTA CONSULTANDO-->
+                            <div id="panel" style="display: flex; gap: 5px; color: white;"></div>  
+                        </div>
                     </div>
                 </div>
-                <div style="width:90%; "><!--cuadro mapa-->
-                    <div id="panel" style="display: flex; gap: 5px; color: white;"></div>
+                <div style="width:75%; "><!--cuadro mapa-->
+                    
                     <div class="cuadro_mapas" id="map">
                     </div>
                     
+                    
                 </div>
             </div>
+            
             <br>
             <hr class="linea">
             <div style=" width: 100%; justify-items: center;"> <!--Tabla De Respuestas-->
+                <div class="cuadro2" id="cuadrocolumnas"><!--seleccion de columnass-->
+                    <div class="cuadro_selec">
+                        <div style="display: flex; gap: 10px;">
+                            <div>
+                               <input type="checkbox" value="2" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">RED</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="3" class="chkColumna" >     
+                            </div>
+                            <div>
+                                <p style="color: white;">COORDENADAS</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="4" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">ID_CTO</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="5" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">DESTINO</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="6" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">DIRECCION ASOCIADA</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="7" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">DIST</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="8" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">COINVERSOR</p>
+                            </div>
+                        </div>
+                         <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="9" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">PD</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="10" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">OLT</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: -20px;">
+                            <div>
+                               <input type="checkbox" value="11" class="chkColumna" checked>     
+                            </div>
+                            <div>
+                                <p style="color: white;">CONSULTA</p>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="solapa">
+                        <p class="vertical">COLUMNAS</p>
+                    </div>
+                </div>
+                <div>
                     <table id="tbrespuesta" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>VER</th>
+                                <th>RED</th>
                                 <th>COORDENADAS</th>
                                 <th>ID_CTO</th>
                                 <th>DESTINO</th>
@@ -149,6 +273,7 @@
                         </tbody>
                         
                     </table>
+                </div>
             </div>
             
         </div>
@@ -161,10 +286,157 @@
 </html>
 
 <script>
-      var map = L.map('map').setView([4.696611, -74.070353], 18);
-       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+
+function aplicarColumnas() {
+
+    $('.chkColumna').each(function () {
+
+        const numcol = parseInt($(this).val()) - 1;
+
+        if ($(this).is(':checked')) {
+            
+            mostrar(numcol);
+        } else {
+            oculta(numcol);
+        }
+
+    });
+
+}
+
+aplicarColumnas();
+
+$('.solapa').on('click', function(){
+    $('#cuadrocolumnas').toggleClass('cuadro2vista');
+});
+
+
+$('.chkColumna').on('change', function() {
+
+    const numcol = parseInt($(this).val()) - 1;
+
+    if ($(this).is(':checked')) {
+       mostrar(numcol);
+    } else {
+        oculta(numcol);
+    }
+
+});
+
+function oculta(indice) {
+
+    let filas = document.querySelectorAll('#tbrespuesta tr');
+
+    filas.forEach(fila => {
+        if (fila.cells[indice]) {
+            fila.cells[indice].style.display = 'none';
+        }
+    });
+
+}
+
+function mostrar(indice) {
+
+    let filas = document.querySelectorAll('#tbrespuesta tr');
+
+    filas.forEach(fila => {
+        if (fila.cells[indice]) {
+            fila.cells[indice].style.display = '';
+            // o 'table-cell'
+        }
+    });
+
+}
+
+
+function limpiarRutas() {
+
+    Object.keys(rutas).forEach(id => {
+
+        if (rutas[id].routeLayer) {
+            map.removeLayer(rutas[id].routeLayer);
+        }
+
+        if (rutas[id].markerOrigen) {
+            map.removeLayer(rutas[id].markerOrigen);
+        }
+
+        if (rutas[id].markerDestino) {
+            map.removeLayer(rutas[id].markerDestino);
+        }
+
+    });
+
+    rutas = {};
+
+}
+
+    $('#btnbusquedaddireccion').click(function(){
+
+        $('#busquedacoordenada').css('display','none');
+        $('#busquedadireccion').css('display','block');
+
+    });
+    $('#btnbusquedadcoordenada').click(function(){
+
+        $('#busquedacoordenada').css('display','block');
+        $('#busquedadireccion').css('display','none');
+
+    });
+
+    let usuario = "{{ session('usuario') }}";
+
+    $('#usuarioactual').val(usuario);
+
+    if($('#usuarioactual').val() === ''){
+        
+        alert('Ingrese usuario Y contraseña para acceder a GEOLIK')
+        window.location.href = '/';
+    }
+
+
+    let timeout;
+
+    function resetTimer() {
+        clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            $('#usuarioactual').val('');
+            alert('Su sesión ha expirado por inactividad');
+            window.location.href = '/';
+        }, 15 * 60 * 1000); // 15 minutos
+    }
+
+    document.addEventListener('mousemove', resetTimer);
+    document.addEventListener('keypress', resetTimer);
+    document.addEventListener('click', resetTimer);
+
+    resetTimer();
+
+    $('#salir').click(function(){
+
+        $.ajax({
+            url:'/logout',
+            method:'POST',
+            data:{
+                _token:$('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(){
+
+                window.location.href = '/';
+
+            }
+        });
+
+    });
+    
+     var map = L.map('map').setView([4.696611, -74.070353], 18);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'OpenStreetMap'
         }).addTo(map);
+
+   
 
        
     $('#consultacoordenadas').click(function(){
@@ -174,6 +446,7 @@
         const long = $('#longitud').val();
 
         limpiezarespuesta();
+        limpiarRutas();
         
         if(!lat && !long && !direcc){
             alert('Ingrese datos de Coordenadas o Direccion para proceso GEOLIK')
@@ -186,7 +459,9 @@
             zc();
             za();
             emp();
-          
+            setTimeout(() => {
+                aplicarColumnas()
+            }, 1000);
         }
         if(lat && long && direcc){
             alert('Proceso prioriza busqueda por COORDENADAS')
@@ -196,6 +471,9 @@
             zc();
             za();
             emp();
+            setTimeout(() => {
+                aplicarColumnas()
+            }, 1000);
            
         }
 
@@ -203,6 +481,9 @@
             consultacoordenada();
             creaciongeom();
             direccion();
+            setTimeout(() => {
+                aplicarColumnas()
+            }, 1000);
         }
 
 
@@ -225,7 +506,7 @@
                  _token:$('meta[name="csrf-token"]').attr('content')
             },
             success:function(response){
-                alert(response.mensaje)
+               
                 console.log(response)
             },
             error:function(xhr){
@@ -260,7 +541,7 @@
                  _token:$('meta[name="csrf-token"]').attr('content')
             },
             success:function(response){
-                alert(response.mensaje)
+               
                 console.log(response)
             },
             error:function(xhr){
@@ -287,7 +568,7 @@
              },
 
              success:function(response){
-                alert(response.mensaje);
+                console.log(response.mensaje);
              }
 
         });
@@ -309,6 +590,7 @@
                     html += `
                         <tr>
                             <td></td>
+                            <td>Direc Exacta<td>
                             <td>${item.coordenadas}</td>
                             <td>${item.id_cto1}</td>
                             <td>${item.op1cto}</td>
@@ -331,6 +613,49 @@
 
     }
 
+    function dato(valor) {
+
+        let panel = $('#cuadrotabladirecciones')
+
+        panel.css('display','block')
+        alert(valor);
+
+     $.ajax({
+
+        url:'/consult_direccion',
+        type:'POST',
+        data:{
+            valor:valor,
+            _token:$('meta[name="csrf-token"]').attr('content')
+
+        },
+
+        success:function(response){
+            let html = '';
+
+                response.data.forEach(function(item){
+
+                    html += `
+                        <tr>
+                            <td>${item.cto}</td>
+                            <td>${item.localidad}</td>
+                            <td>${item.direccion_cli}</td>
+                            
+                        </tr>
+                    `;
+
+                });
+
+                $('#datospordireccion tbody').html(html);
+        }
+        
+
+
+     });
+
+
+    }
+
     function zc(){
 
         $.ajax({
@@ -350,6 +675,7 @@
                             <td>
                                 <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
                             </td>
+                            <td>FTTH</td>
                             <td>${item.coordenadas}</td>
                             <td>${item.id_cto1}</td>
                             <td>${item.op1cto}</td>
@@ -362,6 +688,8 @@
                             
                         </tr>
                     `;
+
+                    aplicarColumnas();
 
                 });
 
@@ -392,6 +720,7 @@
                                 <td>
                                     <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
                                 </td>
+                                <td>FIBRA</td>
                                 <td>${item.coordenadas}</td>
                                 <td>${item.idemp}</td>
                                 <td>${item.empalme}</td>
@@ -404,6 +733,7 @@
                                 
                             </tr>
                         `;
+                        aplicarColumnas();
 
                     });
 
@@ -434,9 +764,13 @@
                                 <td>
                                     <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
                                 </td>
+                                <td>FTTH</td>
                                 <td>${item.coordenadas}</td>
                                 <td>${item.id_cto1}</td>
-                                <td>${item.op1cto}</td>
+                                <td><a href="#" onclick="dato('${item.op1cto}'); return false;">
+                                        ${item.op1cto}
+                                    </a>
+                                </td>
                                 <td>${item.direccion_cli}</td>
                                 <td>${item.op1distanciacto}</td>
                                 <td>${item.op1feeder}</td>
@@ -448,7 +782,7 @@
                         `;
 
                     });
-
+                    aplicarColumnas();
                     $('#tbrespuesta tbody').append(html);
                 }
 
@@ -646,6 +980,11 @@
 
         console.log("GEOMETRY:", data.features[0].geometry);
 
+        let segmento2 = data.features[0].properties.segments[0];
+
+        let totalDistance2 = segmento2.distance;
+
+
 
 
                 // ==========================
@@ -656,10 +995,14 @@
                     style: {
 
                         color: 'red',
-
                         weight: 5
 
+                    },
+                    onEachFeature: function(feature, layer) {
+                        layer.bindTooltip(`${totalDistance2.toFixed(0)} m`);
                     }
+                    
+                    
 
                 }).addTo(map);
 
@@ -687,21 +1030,21 @@
 
                 let totalDuration = segmento.duration;
 
-                let html = "<h6>Indicaciones de ruta</h6>";
+                let html = "";
 
                 html += `
                     <p style="margin-left:15px; margin-right:15px;">
                         <b>Distancia:</b>
-                        ${(totalDistance / 1000).toFixed(2)} km
+                        ${totalDistance2.toFixed(0)} metros
                     </p>
                 `;
 
-                html += `
+               /* html += `
                     <p>
                         <b>Tiempo:</b>
                         ${(totalDuration / 60).toFixed(0)} min
                     </p>
-                `;
+                `;*/
 
                 document.getElementById("panel").innerHTML = html;
 
