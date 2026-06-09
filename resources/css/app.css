@@ -19,7 +19,7 @@
     background-color: #1c1b1d;
     display: flex;
     justify-content: center;
-    box-shadow:  0 0 15px #6ec7ec;
+    box-shadow:  0 0 10px #6ec7ec;
     
 }
 
@@ -64,7 +64,7 @@
     height: 100%;
     background-color: #1c1b1d;
     z-index: 2;
-    box-shadow: 0 0 15px #6ec7ec;
+    box-shadow: 0 0 10px #6ec7ec;
     border-radius: 8px 0px 0px 8px;
     transition: left 3s ease;
 
@@ -147,7 +147,7 @@
     display: flex;
     padding: 10px 0px 10px 25px;
     padding-left: 1%;
-    box-shadow:  0 0 15px #6ec7ec;
+    box-shadow:  0 0 10px #6ec7ec;
     transform: translate(20px,0);
     border-radius: 0px 0px 10px 10px;
     
@@ -171,7 +171,7 @@
     background-color: #1c1b1d;
     display: flex;
     padding-left: 20%;
-    box-shadow:  0 0 15px #6ec7ec;
+    box-shadow:  0 0 10px #6ec7ec;
    
     
 }
@@ -206,7 +206,7 @@
     width: 90%;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 0 15px #6ec7ec;
+    box-shadow: 0 0 10px #6ec7ec;
     margin-bottom: 15px;
 }
 .cuadro_mapas{
@@ -215,7 +215,7 @@
     
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 0 15px #6ec7ec;
+    box-shadow: 0 0 10px #6ec7ec;
 }
 .cuadroseleccion{
     display: flex;
@@ -297,6 +297,7 @@ th:last-child{
     padding: 2px 10px 0px 10px;
     border-radius: 8px 8px 0px 0px;
     cursor: pointer;
+    box-shadow: 0 0 8px #6ec7ec;
      transition: background 0.5s ease, transform 0.5s ease;
 }
 
@@ -367,16 +368,30 @@ th:last-child{
     background: #1f2937;
     border-radius: 10px;
     z-index: 9999;
-    display: none;
     margin-left: 23%;
 
+    /* Estado oculto */
+    opacity: 0;
+    transform: translateY(-50px) scale(0.8);
+    visibility: hidden;
+
+    transition: all 0.6s ease;
+}
+
+.cuadro_direcciones.mostrar{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+
+    box-shadow: 0 0 30px #6ec7ec;
 }
 
 .miDiv{
-    height: 300px;
+    height: 377px;
     overflow-y: auto;
     overflow-x: auto;
     text-align: -webkit-center;
+    margin-top: 30px;
 }
 
 #datospordireccion th{
@@ -386,4 +401,8 @@ th:last-child{
         border: solid 8px;
         border-radius: 8px;
         border-color: #1f2937 ;
+}
+.btn-close{
+    filter: grayscale(100%);
+    opacity: 1;
 }

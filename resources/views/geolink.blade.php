@@ -55,8 +55,13 @@
             
         </div>
         <div id="cuadrotabladirecciones" class="cuadro_direcciones">
+            <br>
+            <div style="text-align: end; padding-right: 31px;">
+                <button id="cierre" type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+            
             <div>
-                <h2 style="margin-top: 25px; color: white;">DIRECCIONES ASICIADAS A CTO</h2>
+                <h2 style="margin-top: 25px; color: white;">DIRECCIONES ASOCIADAS A CTO</h2>
             </div>
             <div>
                 <div class="miDiv">
@@ -456,24 +461,30 @@ function limpiarRutas() {
         if(lat && long && !direcc){
             consultacoordenada();
             creaciongeom();
-            zc();
-            za();
-            emp();
-            setTimeout(() => {
-                aplicarColumnas()
-            }, 1000);
+            $.when(
+                zc(),
+                za(),
+                emp()
+            ).done(function(){
+
+                aplicarColumnas();
+
+            });
         }
         if(lat && long && direcc){
             alert('Proceso prioriza busqueda por COORDENADAS')
             $('#direccion').val('');
             consultacoordenada();
             creaciongeom();
-            zc();
-            za();
-            emp();
-            setTimeout(() => {
-                aplicarColumnas()
-            }, 1000);
+            $.when(
+                zc(),
+                za(),
+                emp()
+            ).done(function(){
+
+                aplicarColumnas();
+
+            });
            
         }
 
@@ -613,12 +624,21 @@ function limpiarRutas() {
 
     }
 
+    $('#cierre').click(function() {
+
+        let panel = $('#cuadrotabladirecciones')
+
+        panel.removeClass('mostrar');
+
+    });
+
+
     function dato(valor) {
 
         let panel = $('#cuadrotabladirecciones')
 
-        panel.css('display','block')
-        alert(valor);
+        panel.addClass('mostrar');
+       
 
      $.ajax({
 
@@ -647,6 +667,8 @@ function limpiarRutas() {
                 });
 
                 $('#datospordireccion tbody').html(html);
+                aplicarColumnas();
+
         }
         
 
@@ -658,7 +680,7 @@ function limpiarRutas() {
 
     function zc(){
 
-        $.ajax({
+        return $.ajax({
 
             url:'/zc',
             type:'POST',
@@ -689,11 +711,12 @@ function limpiarRutas() {
                         </tr>
                     `;
 
-                    aplicarColumnas();
+                    
 
                 });
 
                 $('#tbrespuesta tbody').html(html);
+                aplicarColumnas();
             }
 
         });
@@ -702,7 +725,7 @@ function limpiarRutas() {
 
     function emp(){
 
-        $.ajax({
+        return $.ajax({
 
             url:'/emp',
             type:'POST',
@@ -733,11 +756,13 @@ function limpiarRutas() {
                                 
                             </tr>
                         `;
-                        aplicarColumnas();
+                       
 
                     });
-
+                    
                     $('#tbrespuesta tbody').append(html);
+                    aplicarColumnas();
+
                 }
 
             });
@@ -746,7 +771,7 @@ function limpiarRutas() {
     
     function za(){
 
-        $.ajax({
+        return $.ajax({
 
             url:'/za',
             type:'POST',
@@ -782,8 +807,9 @@ function limpiarRutas() {
                         `;
 
                     });
-                    aplicarColumnas();
+                   
                     $('#tbrespuesta tbody').append(html);
+                    aplicarColumnas();
                 }
 
             });
