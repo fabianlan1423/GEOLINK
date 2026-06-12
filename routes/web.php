@@ -103,5 +103,10 @@ Route::get('/test-ors', function () {
         ];
 
     }
+    
 
+});
+
+Route::get('/phpinfo', function () {
+    phpinfo();
 });

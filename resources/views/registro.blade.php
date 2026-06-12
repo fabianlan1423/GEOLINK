@@ -235,12 +235,8 @@ function registro(){
             
         },
         error:function(error){
+            console.log(xhr.responseText);
             alert('Error en registro de usuario '+ error)
-        },
-        error:function(xhr){
-
-        console.log(xhr.responseText);
-
         }
     });
 

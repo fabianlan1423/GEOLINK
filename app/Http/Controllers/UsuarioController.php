@@ -218,6 +218,7 @@ class UsuarioController extends Controller
                                     AND o.grupo_cto LIKE '%Abierta%'
                                     AND o.puertos_libres_cto > 1
                                     AND p.respuesta IS NULL
+                                    AND o.cto NOT LIKE '%PC%'
                             ) t
                             WHERE rn = 1   -- solo la más cercana por cada CTO
                             ORDER BY p.geom <-> t.geom

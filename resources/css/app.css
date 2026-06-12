@@ -387,7 +387,7 @@ th:last-child{
 }
 
 .miDiv{
-    height: 377px;
+    height: 100%;
     overflow-y: auto;
     overflow-x: auto;
     text-align: -webkit-center;

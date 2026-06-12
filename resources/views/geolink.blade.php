@@ -63,7 +63,7 @@
             <div>
                 <h2 style="margin-top: 25px; color: white;">DIRECCIONES ASOCIADAS A CTO</h2>
             </div>
-            <div>
+            <div style="height: 50%;">
                 <div class="miDiv">
                     <table id="datospordireccion" style="margin-top: 15px;">
                         <thead>
@@ -459,8 +459,13 @@ function limpiarRutas() {
        
 
         if(lat && long && !direcc){
-            consultacoordenada();
-            creaciongeom();
+
+            $.when(
+                consultacoordenada()
+            ).done(function(){
+                creaciongeom();
+            });
+
             $.when(
                 zc(),
                 za(),
@@ -474,8 +479,12 @@ function limpiarRutas() {
         if(lat && long && direcc){
             alert('Proceso prioriza busqueda por COORDENADAS')
             $('#direccion').val('');
-            consultacoordenada();
-            creaciongeom();
+            $.when(
+                consultacoordenada()
+            ).done(function(){
+                creaciongeom();
+            });
+
             $.when(
                 zc(),
                 za(),
@@ -489,8 +498,11 @@ function limpiarRutas() {
         }
 
         if(direcc && !lat && !long){
-            consultacoordenada();
-            creaciongeom();
+            $.when(
+                consultacoordenada()
+            ).done(function(){
+                creaciongeom();
+            });
             direccion();
             setTimeout(() => {
                 aplicarColumnas()
@@ -688,6 +700,14 @@ function limpiarRutas() {
                   _token:$('meta[name="csrf-token"]').attr('content')
             },
             success:function(response){
+              
+                console.log("ZC response:", response);
+
+                if (!response || !Array.isArray(response.data)) {
+                    console.error("ZC: respuesta inválida", response);
+                    
+                }
+
                 let html = '';
 
                 response.data.forEach(function(item){
@@ -734,6 +754,12 @@ function limpiarRutas() {
                 _token:$('meta[name="csrf-token"]').attr('content') 
             },
             success:function(response){
+                console.log("EMP response:", response);
+
+                if (!response || !Array.isArray(response.data)) {
+                    console.error("EMP: respuesta inválida", response);
+                    
+                }
                     let html = '';
 
                     response.data.forEach(function(item){
@@ -780,6 +806,12 @@ function limpiarRutas() {
                 _token:$('meta[name="csrf-token"]').attr('content') 
             },
             success:function(response){
+                console.log("ZA response:", response);
+
+                if (!response || !Array.isArray(response.data)) {
+                    console.error("ZA: respuesta inválida", response);
+                    
+                }
                     let html = '';
 
                     response.data.forEach(function(item){
