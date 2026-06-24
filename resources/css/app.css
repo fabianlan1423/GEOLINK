@@ -250,24 +250,43 @@ table{
 
 }
 
+tbody tr:nth-child(odd) {
+    background-color: rgb(28, 27, 29); /* Filas impares */
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(37, 49, 66, 0.514); /* Filas pares */
+}
+
+tbody tr:hover {
+    background-color: rgb(33, 72, 88);
+    cursor: pointer;
+}
+
+
 th{
 
-    width: 120px;
+    width: auto;
     height: 40px;
     border: solid 2px #45a7ef;
     border-radius: 8px;
-    background: #1f2937;
+    background: rgb(65 105 122 / 54%);
+    padding: 5px 15px 5px 15px;
+    border: solid 5px !important;
+    border-radius: 15px 15px 0px 0px !important;
+    border-color: #1c1b1d !important; 
     
 
 }
 
 td{
 
-    width: 120px;
+    width: auto;
     height: 35px;
     border: solid 2px #45a7ef;
     border-radius: 8px;
     text-align: center;
+    padding: 5px 10px 5px 10px;
 
 }
 

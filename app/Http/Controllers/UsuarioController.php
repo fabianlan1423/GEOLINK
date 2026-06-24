@@ -182,6 +182,55 @@ class UsuarioController extends Controller
        
     }
 
+    public function consultazatigo(Request $request){
+        $data = DB::connection('conexion_osp')
+        ->select("SELECT 
+                    p.latitud,
+                    p.longitud,
+                    p.direccion,
+                    o.olt_id as olt,
+                    o.armario_id AS armario,
+                    o.nap_id AS id_nap,
+                    o.tipo_nap AS Tipo_Nap,
+                    o.direccion AS direccion_punto,
+                    o.estadohilo AS estado_hilo,
+                    O.central,
+                    ST_Distance(p.geom::geography, o.geom::geography)::numeric(10,2) AS op1distanciacto,
+                    --o.puertos_libres_cto AS op1dipscto,
+                    --o.lat_equipo as lat_cto,
+                    --o.long_equipo as long_cto,
+                    CONCAT(o.latitud,',',o.longitud) as coordenadas,
+                    CONCAT(o.longitud,',',o.latitud,',',o.nap_id) as coorde,
+                    'ZA-FENIX' as grupo
+                FROM punto_sencillo p
+                JOIN LATERAL (
+                    SELECT *
+                    FROM (
+                        SELECT 
+                            o.*,
+                            ROW_NUMBER() OVER (
+                                PARTITION BY o.armario_id 
+                                ORDER BY p.geom <-> o.geom
+                            ) as rn
+                        FROM consulta_fenix o
+                        WHERE 
+                            ST_DWithin(p.geom::geography, o.geom::geography, 600)
+                            and o.estadohilo > 1
+                            and o.tipo_nap <> 'INTERNO'
+                            AND p.respuesta IS NULL
+                    ) t
+                    WHERE rn = 1   -- solo la más cercana por cada CTO
+                    ORDER BY p.geom <-> t.geom
+                    LIMIT 5        -- ahora sí: 2 CTO diferentes
+                ) o ON TRUE
+                ORDER BY op1distanciacto;");
+
+                return response()->json([
+                    'data'=>$data
+                ]);
+
+    }
+
     public function consultaza(Request $request){
 
         $data = DB::connection('conexion_osp')
@@ -286,7 +335,7 @@ class UsuarioController extends Controller
                             o.propietario AS feeder,
                             '-' AS puertos,
                             '-' AS op1_coinversor,
-                            CONCAT(o.coordenada_x,',',o.coordenada_y) as coordenadas,
+                            CONCAT(o.coordenada_x,',',o.coordenada_y) as coordenadas, -- COORDENDADA_X = LONGITUD COORDENDADA_Y = LATITUD
                             CONCAT(o.coordenada_y,',',o.coordenada_x,',',o.terminal_fibra_optica_codigo) as coorde,
                             'EMP' AS consultaemp
                         FROM punto_sencillo p
@@ -313,6 +362,60 @@ class UsuarioController extends Controller
             'data'=>$data
         ]);
         
+
+    }
+
+    public function consultanodo(){
+
+        $data = DB::connection('conexion_osp')
+        ->select("SELECT 
+                            p.latitud,
+                            p.longitud,
+                            p.direccion,
+                            o.lat,
+                            o.lon,
+                            o.hl,
+                            o.ip,
+                            o.modelo,
+                            o.anillo,
+                            o.nombre_equipo AS nombre_equipo,
+                            ST_Distance(p.geom, o.geom)::numeric(10,2) AS distancianodo,
+                            o.marca AS marca,
+                            '-' AS puertos,
+                            '-' AS op1_coinversor,
+                            CONCAT(o.lat,',',o.lon) as coordenadas,
+                            CONCAT(o.lon,',',o.lat,',',o.modelo) as coorde,
+                            'NODO' as consulta
+                        FROM punto_sencillo p
+                        JOIN LATERAL (
+                        SELECT *
+                        FROM (
+                            SELECT 
+                                o.*,
+                                ROW_NUMBER() OVER (
+                                    PARTITION BY o.nombre_equipo
+                                    ORDER BY p.geom <-> o.geom
+                                ) as rn
+                            FROM nodo_central o
+                            WHERE 
+                                ST_DWithin(p.geom::geography, o.geom::geography, 600)
+                                and p.respuesta is null
+                                AND (
+								    o.nota_2 IS NULL
+								    OR o.nota_2 <> 'APAGADO RED UNICA'
+								)
+                        ) t
+                        WHERE rn = 1   -- solo la más cercana por cada CTO
+                        ORDER BY p.geom <-> t.geom
+                        LIMIT 4        -- ahora sí: 2 CTO diferentes
+                    ) o ON TRUE");
+
+        return response() -> json([
+            'data'=>$data
+        ]);
+
+       
+
 
     }
    

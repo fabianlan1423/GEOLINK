@@ -67,6 +67,16 @@ Route::post('/ors/ruta',
 Route::post('/consult_direccion', 
     [UsuarioController::class, 'consultadireccion']
 );
+Route::post('/consultnodo', 
+    [UsuarioController::class, 'consultanodo']
+);
+Route::post('/zatigo', 
+    [UsuarioController::class, 'consultazatigo']
+);
+
+
+
+
 
 Route::post('/logout', function () {
     session()->forget('usuario');

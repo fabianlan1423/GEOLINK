@@ -100,6 +100,16 @@
                             </div>
                             
                         </div>
+                        <div style="display: flex;">
+                            <div style="display: flex; gap: 10px; align-items: baseline;">
+                                <p style="color: white;">BASE OSP</p>
+                                <input type="checkbox" id="coltel" name="coltel" checked>
+                            </div>
+                            <div style="display: flex; gap: 10px; align-items: baseline; margin-left: 15px;">
+                                <p style="color: white;">BASE FENIX</p>
+                                <input type="checkbox" id="tigo" name="tigo" >
+                            </div>
+                        </div>
                         <hr>
                         <div style="display: flex; gap: 10px;">
                             <div id="btnbusquedaddireccion" class="botonconsultadireccioncoordenada"><!--direccion-->
@@ -260,7 +270,8 @@
                                 <th>DIST</th>
                                 <th>COINVERSOR</th>
                                 <th title="PUERTOS DISPONIBLES">PD</th>
-                                <th>OLT</th>
+                                <th>OLT/EQUIPO</th>
+                                <th>NODO</th>
                                 <th>CONSULTA</th>
                             </tr>
                         </thead>
@@ -449,50 +460,68 @@ function limpiarRutas() {
         const direcc = $('#direccion').val();
         const lat = $('#latitud').val();
         const long = $('#longitud').val();
+        const coltel = $('#coltel')
+        const fenix = $('#tigo')
+      
+
+
 
         limpiezarespuesta();
         limpiarRutas();
-        
+        $('#tbrespuesta tbody').empty();
+
+
         if(!lat && !long && !direcc){
             alert('Ingrese datos de Coordenadas o Direccion para proceso GEOLIK')
         }
        
 
-        if(lat && long && !direcc){
+        if (lat && long && !direcc) {
 
-            $.when(
-                consultacoordenada()
-            ).done(function(){
+            $.when(consultacoordenada()).done(function () {
                 creaciongeom();
             });
 
-            $.when(
-                zc(),
-                za(),
-                emp()
-            ).done(function(){
+            let procesos = [];
 
+            if (coltel.is(':checked')) {
+                procesos.push(zc());
+                procesos.push(za());
+                procesos.push(emp());
+                procesos.push(nodos());
+            }
+
+            if (fenix.is(':checked')) {
+                procesos.push(zatigo());
+            }
+
+            $.when.apply($, procesos).done(function () {
                 aplicarColumnas();
-
             });
         }
+        
         if(lat && long && direcc){
             alert('Proceso prioriza busqueda por COORDENADAS')
             $('#direccion').val('');
-            $.when(
-                consultacoordenada()
-            ).done(function(){
+            $.when(consultacoordenada()).done(function () {
                 creaciongeom();
             });
 
-            $.when(
-                zc(),
-                za(),
-                emp()
-            ).done(function(){
+            let procesos = [];
 
+            if (coltel.is(':checked')) {
+                procesos.push(zc());
+                procesos.push(za());
+                procesos.push(emp());
+                procesos.push(nodos());
+            }
+
+            if (fenix.is(':checked')) {
+                procesos.push(zatigo());
+            }
+
+            $.when.apply($, procesos).done(function () {
                 aplicarColumnas();
-
             });
            
         }
@@ -726,6 +755,7 @@ function limpiarRutas() {
                             <td>${item.op1feeder}</td>
                             <td>${item.op1dipscto}</td>
                             <td>${item.op1olt}</td>
+                            <td></td>
                             <td>${item.grupo}</td>
                             
                         </tr>
@@ -773,11 +803,12 @@ function limpiarRutas() {
                                 <td>${item.coordenadas}</td>
                                 <td>${item.idemp}</td>
                                 <td>${item.empalme}</td>
-                                <td>${item.puertos}</td>
+                                <td></td>
                                 <td>${item.distancia}</td>
                                 <td>${item.feeder}</td>
                                 <td>${item.puertos}</td>
                                 <td>${item.puertos}</td>
+                                <td></td>
                                 <td>${item.consultaemp}</td>
                                 
                             </tr>
@@ -833,6 +864,7 @@ function limpiarRutas() {
                                 <td>${item.op1feeder}</td>
                                 <td>${item.op1dipscto}</td>
                                 <td>${item.op1olt}</td>
+                                <td></td>
                                 <td>${item.grupo}</td>
                                 
                             </tr>
@@ -848,6 +880,126 @@ function limpiarRutas() {
 
     }
     
+    function nodos(){
+
+        const lat = $('#latitud');
+        const long = $('#longitud');
+
+        $.ajax({
+
+            url:'/consultnodo',
+            type:'POST',
+            data:{
+
+                _token:$('meta[name="csrf-token"]').attr('content')
+
+            },
+
+            success:function(response){
+                console.log("NODO response:", response);
+
+                if (!response || !Array.isArray(response.data)) {
+                    console.error("NODO: respuesta inválida", response);
+                    
+                }
+                    let html = '';
+
+                    response.data.forEach(function(item){
+
+                        html += `
+                            <tr>
+                                <td>
+                                    <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/> 
+                                </td>
+                                <td>NODO</td>
+                                <td>${item.coordenadas}</td>
+                                <td>${item.ip}</td>
+                                <td>${item.modelo}</td>
+                                <td></td>
+                                <td>${item.distancianodo}</td>
+                                <td>${item.marca}</td>
+                                <td></td>
+                                <td>${item.nombre_equipo}</td>
+                                <td>${item.anillo}</td>
+                                <td>${item.consulta}</td>
+                                
+                            </tr>
+                        `;
+
+                    });
+                   
+                    $('#tbrespuesta tbody').append(html);
+                    aplicarColumnas();
+                }
+
+
+
+        });
+
+
+
+    }
+
+    function zatigo(){
+
+    $.ajax({
+
+        url:'/zatigo',
+        type:'POST',
+        data:{
+
+            _token:$('meta[name="csrf-token"]').attr('content') 
+        },
+
+        success:function(response){
+            console.log("ZA TIGO response:", response);
+
+                if (!response || !Array.isArray(response.data)) {
+                    console.error("ZA TIGO: respuesta inválida", response);
+                    
+                }
+                    let html = '';
+
+                    response.data.forEach(function(item){
+
+                        html += `
+                            <tr>
+                                <td>
+                                    <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
+                                </td>
+                                <td>FTTH</td>
+                                <td>${item.coordenadas}</td>
+                                <td>${item.olt}</td>
+                                <td>${item.armario}</td>
+                                <td>${item.direccion_punto}</td>
+                                <td>${item.op1distanciacto}</td>
+                                <td>${item.estado_hilo}</td>
+                                <td></td>
+                                <td>${item.olt}</td>
+                                <td>${item.central}</td>
+                                <td>${item.grupo}</td>
+                                
+                            </tr>
+                        `;
+
+                    });
+                
+                    $('#tbrespuesta tbody').append(html);
+                    aplicarColumnas();
+                },
+                error:function(xhr){
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                }
+
+    });
+
+    
+
+
+
+    }
+
     let rutas = {};
 
         function ruta(checkbox){
