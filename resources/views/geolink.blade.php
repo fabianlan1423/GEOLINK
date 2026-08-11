@@ -164,6 +164,9 @@
                     
                 </div>
             </div>
+            <div id="cuadroaviso" class="cuadroaviso">
+                
+            </div>
             
             <br>
             <hr class="linea">
@@ -262,13 +265,13 @@
                         <thead>
                             <tr>
                                 <th>VER</th>
-                                <th>RED</th>
+                                <th>MEDIO</th>
                                 <th>COORDENADAS</th>
-                                <th>ID_CTO</th>
+                                <th>ID</th>
                                 <th>DESTINO</th>
                                 <th>DIRECCION ASOCIADA</th>
                                 <th>DIST</th>
-                                <th>COINVERSOR</th>
+                                <th>RED</th>
                                 <th title="PUERTOS DISPONIBLES">PD</th>
                                 <th>OLT/EQUIPO</th>
                                 <th>NODO</th>
@@ -453,100 +456,120 @@ function limpiarRutas() {
         }).addTo(map);
 
    
+    async function ejecutarConsultas(fenix) {
 
-       
-    $('#consultacoordenadas').click(function(){
+        try {
+
+            await zc();
+            await za();
+            if (fenix.is(':checked')) {
+                await zatigo();
+            }
+            await emp();
+            await nodos();
+
+            
+
+            aplicarColumnas();
+
+            console.log("Proceso terminado");
+
+        } catch (error) {
+
+            console.error(error);
+            alert("Ocurrió un error durante las consultas.");
+
+        }
+
+    }
+
+    function consulta(){
 
         const direcc = $('#direccion').val();
         const lat = $('#latitud').val();
         const long = $('#longitud').val();
-        const coltel = $('#coltel')
-        const fenix = $('#tigo')
-      
-
-
+        const fenix = $('#tigo');
 
         limpiezarespuesta();
         limpiarRutas();
         $('#tbrespuesta tbody').empty();
 
-
-        if(!lat && !long && !direcc){
-            alert('Ingrese datos de Coordenadas o Direccion para proceso GEOLIK')
+        if (!lat && !long && !direcc) {
+            alert('Ingrese datos de Coordenadas o Dirección para proceso GEOLINK');
+            return;
         }
-       
+
+        //==============================================================
+        // CONSULTA POR COORDENADAS
+        //==============================================================
 
         if (lat && long && !direcc) {
 
-            $.when(consultacoordenada()).done(function () {
+            $.when(consultacoordenada()).done(async function () {
+
                 creaciongeom();
+
+                await ejecutarConsultas(fenix);
+
             });
 
-            let procesos = [];
-
-            if (coltel.is(':checked')) {
-                procesos.push(zc());
-                procesos.push(za());
-                procesos.push(emp());
-                procesos.push(nodos());
-            }
-
-            if (fenix.is(':checked')) {
-                procesos.push(zatigo());
-            }
-
-            $.when.apply($, procesos).done(function () {
-                aplicarColumnas();
-            });
+            return;
         }
-        
-        if(lat && long && direcc){
-            alert('Proceso prioriza busqueda por COORDENADAS')
+
+        //==============================================================
+        // COORDENADAS Y DIRECCIÓN
+        //==============================================================
+
+        if (lat && long && direcc) {
+
+            alert('Proceso prioriza búsqueda por COORDENADAS');
+
             $('#direccion').val('');
+
+            $.when(consultacoordenada()).done(async function () {
+
+                creaciongeom();
+
+                await ejecutarConsultas(fenix);
+
+            });
+
+            return;
+        }
+
+        //==============================================================
+        // CONSULTA POR DIRECCIÓN
+        //==============================================================
+
+        if (direcc && !lat && !long) {
+
             $.when(consultacoordenada()).done(function () {
+
                 creaciongeom();
+
             });
 
-            let procesos = [];
-
-            if (coltel.is(':checked')) {
-                procesos.push(zc());
-                procesos.push(za());
-                procesos.push(emp());
-                procesos.push(nodos());
-            }
-
-            if (fenix.is(':checked')) {
-                procesos.push(zatigo());
-            }
-
-            $.when.apply($, procesos).done(function () {
-                aplicarColumnas();
-            });
-           
-        }
-
-        if(direcc && !lat && !long){
-            $.when(
-                consultacoordenada()
-            ).done(function(){
-                creaciongeom();
-            });
             direccion();
-            setTimeout(() => {
-                aplicarColumnas()
+
+            setTimeout(function () {
+
+                aplicarColumnas();
+
             }, 1000);
+
         }
 
+    }
 
-        
-        
-        
-
-    });
+    $('#consultacoordenadas').click(consulta) 
 
 
     function limpiezarespuesta(){
+
+        const cuadroconsulta = $('#cuadroaviso');
+
+        cuadroconsulta.css('display','block');
+        cuadroconsulta.text('Ejecutqando Limpieza Tabla');
 
         
         
@@ -560,6 +583,7 @@ function limpiarRutas() {
             success:function(response){
                
                 console.log(response)
+                cuadroconsulta.text('Limpieza tabla exitosa.')
             },
             error:function(xhr){
 
@@ -577,6 +601,10 @@ function limpiarRutas() {
         const longitud = $('#longitud').val()
         const direccion = $('#direccion').val()
         const localidad = $('#localidad').val()
+        const cuadroconsulta = $('#cuadroaviso');
+
+        cuadroconsulta.css('display','block');
+        cuadroconsulta.text('Ejecutando consulta por coordenada.');
         
         $.ajax({
            
@@ -600,10 +628,9 @@ function limpiarRutas() {
 
                 console.log(xhr.responseText);
 
-                alert(
-                    'Error cargando coordenadas de consulta\n\n' +
-                    xhr.responseText
-                );
+                cuadroconsulta.text('Error cargando coordenadas de consulta');
+                consulta()
+                
 
             }
             
@@ -626,6 +653,12 @@ function limpiarRutas() {
         });
     }
     function direccion(){
+
+
+        const cuadroconsulta = $('#cuadroaviso');
+
+        
+        cuadroconsulta.text('Ejecutando consulta por Direccion.');
 
         $.ajax({
 
@@ -659,6 +692,9 @@ function limpiarRutas() {
                 });
 
                 $('#tbrespuesta tbody').html(html);
+
+                cuadroconsulta.text('Consulta Por Direccion Exitosa');
+                cuadroconsulta.css('display','none')
             }
 
         });
@@ -721,6 +757,12 @@ function limpiarRutas() {
 
     function zc(){
 
+
+        const cuadroconsulta = $('#cuadroaviso');
+
+        cuadroconsulta.css('display','block');
+        cuadroconsulta.text('Ejecutando consulta Zona Cerrada.');
+
         return $.ajax({
 
             url:'/zc',
@@ -767,6 +809,8 @@ function limpiarRutas() {
 
                 $('#tbrespuesta tbody').html(html);
                 aplicarColumnas();
+
+                cuadroconsulta.text('Consulta Zona Cerrada Exitosa')
             }
 
         });
@@ -774,6 +818,11 @@ function limpiarRutas() {
     }
 
     function emp(){
+
+        const cuadroconsulta = $('#cuadroaviso');
+
+        cuadroconsulta.css('display','block');
+        cuadroconsulta.text('Ejecutando consulta Empalme.');
 
         return $.ajax({
 
@@ -814,6 +863,7 @@ function limpiarRutas() {
                             </tr>
                         `;
                        
+                        cuadroconsulta.text('Consulta Empalme Exitosa')
 
                     });
                     
@@ -827,6 +877,11 @@ function limpiarRutas() {
     }
     
     function za(){
+
+        const cuadroconsulta = $('#cuadroaviso');
+
+        cuadroconsulta.css('display','block');
+        cuadroconsulta.text('Ejecutando consulta Zona Abierta.');
 
         return $.ajax({
 
@@ -874,6 +929,9 @@ function limpiarRutas() {
                    
                     $('#tbrespuesta tbody').append(html);
                     aplicarColumnas();
+
+
+                    cuadroconsulta.text('Consulta Zona Abierta Exitosa')
                 }
 
             });
@@ -882,10 +940,15 @@ function limpiarRutas() {
     
     function nodos(){
 
+        const cuadroconsulta = $('#cuadroaviso');
+
+        cuadroconsulta.css('display','block');
+        cuadroconsulta.text('Ejecutando consulta Nodos.');
+
         const lat = $('#latitud');
         const long = $('#longitud');
 
-        $.ajax({
+        return $.ajax({
 
             url:'/consultnodo',
             type:'POST',
@@ -930,6 +993,9 @@ function limpiarRutas() {
                    
                     $('#tbrespuesta tbody').append(html);
                     aplicarColumnas();
+
+                    cuadroconsulta.text('Consulta Nodos Ejecutada Con Exito')
+                    cuadroconsulta.css('display','none')
                 }
 
 
@@ -941,6 +1007,11 @@ function limpiarRutas() {
     }
 
     function zatigo(){
+
+    const cuadroconsulta = $('#cuadroaviso');
+
+    cuadroconsulta.css('display','block');
+    cuadroconsulta.text('Ejecutando consulta Zona Abierta TIGO.');
 
     $.ajax({
 
@@ -973,8 +1044,8 @@ function limpiarRutas() {
                                 <td>${item.armario}</td>
                                 <td>${item.direccion_punto}</td>
                                 <td>${item.op1distanciacto}</td>
-                                <td>${item.estado_hilo}</td>
                                 <td></td>
+                                <td>${item.estado_hilo}</td>
                                 <td>${item.olt}</td>
                                 <td>${item.central}</td>
                                 <td>${item.grupo}</td>
@@ -986,6 +1057,9 @@ function limpiarRutas() {
                 
                     $('#tbrespuesta tbody').append(html);
                     aplicarColumnas();
+
+                    cuadroconsulta.text('Consulta Zona Abierta Base Fenix Exitosa')
+                    cuadroconsulta.css('display','none')
                 },
                 error:function(xhr){
                     console.log(xhr.status);

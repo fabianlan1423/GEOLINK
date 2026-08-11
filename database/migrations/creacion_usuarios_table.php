@@ -13,7 +13,7 @@ return new class extends Migration
     {
        
 
-        Schema::create('registro_users', function (Blueprint $table) {
+        Schema::create('glink.registro_users', function (Blueprint $table) {
             
             $table->id();
             $table->text('nombre');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registro_users');
+        Schema::dropIfExists('glink.registro_users');
     }
 };
