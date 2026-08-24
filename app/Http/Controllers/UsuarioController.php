@@ -11,8 +11,9 @@ class UsuarioController extends Controller
 {
    public function guardar(Request $request){
 
-        DB::table('registro_users')->insert([
+        DB::table('glink.registro_users')->insert([
             
+            'usuario' => $request->usuario_registrado,
             'nombre' => $request->nombre,
             'correo' => $request->correo,
             'contraseña' => Hash::make($request->contrasenia1)
@@ -45,7 +46,7 @@ class UsuarioController extends Controller
 
     public function consultausuario(Request $request){
 
-        $usuario = DB::table('registro_users')
+        $usuario = DB::table('glink.registro_users')
             ->where('correo', $request->correo)
             ->exists();
 
@@ -57,8 +58,8 @@ class UsuarioController extends Controller
     }
     public function accesousuario(Request $request){
 
-        $usuario = DB::table('registro_users')
-            ->where('nombre', $request->usuario)
+        $usuario = DB::table('glink.registro_users')
+            ->where('usuario', $request->usuario)
             ->first();
 
         if($usuario && Hash::check($request->password, $usuario->contraseña)){
@@ -113,23 +114,29 @@ class UsuarioController extends Controller
 
             'mensaje' => 'Limpieza tabla punto sencillo exitosa'
         ]);
-        
+
+       
 
        
     }
-    public function creaciongeom(Request $request){
-
+   
+    public function creaciongeom(Request $request)
+    {
         DB::connection('conexion_osp')
-            ->statement('UPDATE glink.punto_sencillo SET geom = ST_SetSRID(ST_MakePoint(longitud, latitud), 4326);');
+            ->statement("
+                UPDATE glink.punto_sencillo
+                SET geom = ST_SetSRID(
+                    ST_MakePoint(longitud, latitud),
+                    4326
+                );
+            ");
 
         return response()->json([
-
-            'mensaje' => 'Creacion de datos en GEOM'
+            'mensaje' => 'Creación de datos en GEOM realizada correctamente.'
         ]);
-        
-
-       
     }
+    
+
     public function consultapordireccion(Request $request){
 
         $data = DB::connection('conexion_osp')
@@ -365,7 +372,7 @@ class UsuarioController extends Controller
 
     }
 
-    public function consultanodo(){
+    public function consultanodo(Request $request){
 
         $data = DB::connection('conexion_osp')
         ->select("SELECT 

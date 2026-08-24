@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('glink.registro_users', function (Blueprint $table) {
             
             $table->id();
+            $table->text('usuario');
             $table->text('nombre');
             $table->text('correo');
             $table->text('contraseña');

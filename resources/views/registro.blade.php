@@ -66,35 +66,44 @@
                             <h5 style="color:#6ec7ec;">REGISTRO GEOLIK</h5>
                         </div>
                     <div style="width: 80%">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="Nombre_usuario" placeholder="* Nombre Completo">
+                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;">
+                            <input type="text" class="form-control" id="Nombre_usuario" placeholder="* Nombre Completo" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
                             <label for="Nombre_usuario">* Nombre</label>
                         </div>
                     </div>
                     <div style="width: 80%">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                            <input type="text" class="form-control" id="usuario_registrado" placeholder="* Usuario">
+                            <label for="usuario_registrado">* Usuario</label>
+                        </div>
+                    </div>
+                    <div style="width: 80%">
+                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
                             <input type="email" class="form-control" id="correo_usuario" placeholder="* Correo">
                             <label for="correo_usuario">* Correo</label>
                         </div>
                     </div>
                     <div style="width: 80%; ">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
                             <input type="password" class="form-control" id="Password_usuario" placeholder="* Contraseña">
                             <label for="Password_usuario">* Contraseña</label>
                         </div>
                     </div>
                     <div style="width: 80%; ">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
                             <input type="password" class="form-control" id="Password_verificado" placeholder="* Verifique Contraseña">
                             <label for="Password_verificado">* Verifique Contraseña</label>
                         </div>
                     </div>
-                    <div style="width: 70%;">
-                        <p id='yatengousuario' class="vinculos">Ya Tengo Usuario</p>
+                    <div style="width: 80%; display: flex; align-items: self-end;">
+                        <div style="width: 40%;">
+                            <p id='yatengousuario' class="vinculos">Ya Tengo Usuario</p>
+                        </div>
+                        <div style="width: 60%; text-align: center; margin-top:25px;">
+                            <input id="btnregistro" class="btn_ingreso" type="button" value="Registro">
+                        </div>    
                     </div>
-                    <div style="width: 80%; text-align: center; margin-top:25px;">
-                        <input id="btnregistro" class="btn_ingreso" type="button" value="Registro">
-                    </div>
+                    
                     
 
                 </div>
@@ -190,6 +199,7 @@ $('#acceso').click(function (){
 function registro(){    
 
     const nombre = $('#Nombre_usuario').val()
+    const usuario_registrado = $('#usuario_registrado').val()
     const usuariocreado = $('#usuario');
     const correo = $('#correo_usuario').val()
     const contrasenia1 = $('#Password_usuario').val()
@@ -218,6 +228,7 @@ function registro(){
             nombre:nombre,
             correo:correo,
             contrasenia1:contrasenia1,
+            usuario_registrado:usuario_registrado,
 
             _token:$('meta[name="csrf-token"]').attr('content')
 
@@ -227,8 +238,9 @@ function registro(){
 
             $('#cuadrooculta').addClass('cuadro50porcen_dre');
             $('#cuadrooculta').removeClass('cuadro50porcen_izq');
-            usuariocreado.val($('#Nombre_usuario').val());
+            usuariocreado.val($('#usuario_registrado').val());
             $('#correo_usuario').val('');
+            $('#usuario_registrado').val('');
             $('#Nombre_usuario').val('');
             $('#Password_usuario').val('');
             $('#Password_verificado').val('');

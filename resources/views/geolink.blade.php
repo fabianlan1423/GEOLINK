@@ -483,7 +483,7 @@ function limpiarRutas() {
 
     }
 
-    function consulta(){
+    async function consulta() {
 
         const direcc = $('#direccion').val();
         const lat = $('#latitud').val();
@@ -499,159 +499,220 @@ function limpiarRutas() {
             return;
         }
 
-        //==============================================================
-        // CONSULTA POR COORDENADAS
-        //==============================================================
+        try {
 
-        if (lat && long && !direcc) {
+            // ==========================================================
+            // COORDENADAS
+            // ==========================================================
 
-            $.when(consultacoordenada()).done(async function () {
+            if (lat && long && !direcc) {
 
-                creaciongeom();
+                console.log('1. Iniciando consultacoordenada');
 
-                await ejecutarConsultas(fenix);
+                await consultacoordenada();
 
-            });
+                console.log('2. consultacoordenada TERMINADA');
 
-            return;
-        }
+                await creaciongeom();
 
-        //==============================================================
-        // COORDENADAS Y DIRECCIÓN
-        //==============================================================
-
-        if (lat && long && direcc) {
-
-            alert('Proceso prioriza búsqueda por COORDENADAS');
-
-            $('#direccion').val('');
-
-            $.when(consultacoordenada()).done(async function () {
-
-                creaciongeom();
+                console.log('3. creaciongeom TERMINADA');
 
                 await ejecutarConsultas(fenix);
 
-            });
+                console.log('4. ejecutarConsultas TERMINADA');
 
-            return;
-        }
+                return;
+            }
 
-        //==============================================================
-        // CONSULTA POR DIRECCIÓN
-        //==============================================================
 
-        if (direcc && !lat && !long) {
+            // ==========================================================
+            // COORDENADAS + DIRECCIÓN
+            // ==========================================================
 
-            $.when(consultacoordenada()).done(function () {
+            if (lat && long && direcc) {
 
-                creaciongeom();
+                alert('Proceso prioriza búsqueda por COORDENADAS');
 
-            });
+                $('#direccion').val('');
 
-            direccion();
+                console.log('1. Iniciando consultacoordenada');
 
-            setTimeout(function () {
+                await consultacoordenada();
+
+                console.log('2. consultacoordenada TERMINADA');
+
+                await creaciongeom();
+
+                console.log('3. creaciongeom TERMINADA');
+
+                await ejecutarConsultas(fenix);
+
+                console.log('4. ejecutarConsultas TERMINADA');
+
+                return;
+            }
+
+
+            // ==========================================================
+            // DIRECCIÓN
+            // ==========================================================
+
+            if (direcc && !lat && !long) {
+
+                await consultacoordenada();
+
+                await creaciongeom();
+
+                await direccion();
 
                 aplicarColumnas();
 
-            }, 1000);
+                return;
+            }
 
+        } catch (error) {
+
+            console.error('ERROR GENERAL EN CONSULTA:', error);
+
+            alert(
+                'Ocurrió un error durante el proceso de consulta.'
+            );
         }
-
     }
-
+    
+    
+    
     $('#consultacoordenadas').click(consulta) 
 
 
-    function limpiezarespuesta(){
+    function limpiezarespuesta() {
 
         const cuadroconsulta = $('#cuadroaviso');
 
-        cuadroconsulta.css('display','block');
-        cuadroconsulta.text('Ejecutqando Limpieza Tabla');
+        cuadroconsulta
+            .css('display', 'block')
+            .text('Ejecutando Limpieza Tabla');
 
-        
-        
-        $.ajax({
-           
-            url:'/limpiezatbrespuesta',
+        return $.ajax({
+            url: '/limpiezatbrespuesta',
             type: 'POST',
             data: {
-                 _token:$('meta[name="csrf-token"]').attr('content')
-            },
-            success:function(response){
-               
-                console.log(response)
-                cuadroconsulta.text('Limpieza tabla exitosa.')
-            },
-            error:function(xhr){
-
-                console.log(xhr.responseText);
-
-                alert(xhr.responseText);
-
+                _token: $('meta[name="csrf-token"]').attr('content')
             }
-        });
- 
-    }
-    function consultacoordenada(){
+        })
+        .done(function(response) {
 
-        const latitud = $('#latitud').val()
-        const longitud = $('#longitud').val()
-        const direccion = $('#direccion').val()
-        const localidad = $('#localidad').val()
+            console.log('Limpieza:', response);
+
+            cuadroconsulta.text('Limpieza tabla exitosa.');
+
+        })
+        .fail(function(xhr) {
+
+            console.error('Error limpieza:', xhr.responseText);
+
+            cuadroconsulta.text('Error limpiando tabla.');
+
+            throw new Error('Error en limpieza de tabla');
+
+        });
+    }
+    function consultacoordenada() {
+
+        const latitud = $('#latitud').val();
+        const longitud = $('#longitud').val();
+        const direccion = $('#direccion').val();
+        const localidad = $('#localidad').val();
+
         const cuadroconsulta = $('#cuadroaviso');
 
-        cuadroconsulta.css('display','block');
-        cuadroconsulta.text('Ejecutando consulta por coordenada.');
-        
-        $.ajax({
-           
-            url:'/datosconsulta',
+        cuadroconsulta
+            .css('display', 'block')
+            .text('Ejecutando consulta por coordenada.');
+
+        return $.ajax({
+            url: '/datosconsulta',
             type: 'POST',
             data: {
-                id_pre:'1',
+                id_pre: '1',
                 latitud: latitud,
                 longitud: longitud,
                 direccion: direccion,
                 localidad: localidad,
-                
-
-                 _token:$('meta[name="csrf-token"]').attr('content')
-            },
-            success:function(response){
-               
-                console.log(response)
-            },
-            error:function(xhr){
-
-                console.log(xhr.responseText);
-
-                cuadroconsulta.text('Error cargando coordenadas de consulta');
-                consulta()
-                
-
+                _token: $('meta[name="csrf-token"]').attr('content')
             }
-            
+        })
+        .done(function(response) {
+
+            console.log('Datos consulta:', response);
+
+        })
+        .fail(function(xhr) {
+
+            console.error('Error datosconsulta:', xhr.responseText);
+
+            cuadroconsulta.text(
+                'Error cargando coordenadas de consulta'
+            );
+
+            throw new Error('Error en /datosconsulta');
+
         });
- 
     }
-    function creaciongeom(){
-        $.ajax({
+    
+    function creaciongeom() {
 
-            url:'/geom',
-            type:'POST',
-            data:{
-                _token:$('meta[name="csrf-token"]').attr('content')
-             },
+        const cuadroconsulta = $('#cuadroaviso');
 
-             success:function(response){
-                console.log(response.mensaje);
-             }
+        cuadroconsulta
+            .css('display', 'block')
+            .text('Creación de Geom para consulta...');
+
+        console.log('================================');
+        console.log('INICIANDO CREACION GEOM');
+        console.log('================================');
+
+        return $.ajax({
+            url: '/geom',
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .done(function(response) {
+
+            console.log('================================');
+            console.log('GEOM CREADA');
+            console.log(response);
+            console.log('================================');
+
+            cuadroconsulta.text(
+                response.mensaje || 'GEOM creada correctamente'
+            );
+
+        })
+        .fail(function(xhr) {
+
+            console.error('================================');
+            console.error('ERROR CREANDO GEOM');
+            console.error(xhr.status);
+            console.error(xhr.responseText);
+            console.error('================================');
+
+            let mensaje = 'Ocurrió un error al crear la geometría.';
+
+            if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                mensaje = xhr.responseJSON.mensaje;
+            }
+
+            cuadroconsulta.text(mensaje);
+
+            throw new Error('Error en /geom');
 
         });
     }
+       
+
     function direccion(){
 
 
@@ -660,7 +721,7 @@ function limpiarRutas() {
         
         cuadroconsulta.text('Ejecutando consulta por Direccion.');
 
-        $.ajax({
+        return $.ajax({
 
             url:'/pordireccion',
             type:'POST',
@@ -1013,7 +1074,7 @@ function limpiarRutas() {
     cuadroconsulta.css('display','block');
     cuadroconsulta.text('Ejecutando consulta Zona Abierta TIGO.');
 
-    $.ajax({
+    return $.ajax({
 
         url:'/zatigo',
         type:'POST',
