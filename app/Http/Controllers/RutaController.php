@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Http;
 
 class RutaController extends Controller
 {
-    public function ruta(Request $request)
+    /** CONSULTA DIRIGIDA A PAGINA DE OSR */
+
+    /*public function ruta(Request $request)
     {
         try {
 
@@ -48,8 +50,37 @@ class RutaController extends Controller
             ], 500);
 
         }
+    }*/
+
+        /** CONSULTA DIRIGIDA A EQUIPO LOCAL CON INSTALACION OSR  (OPENROUTE SERVICE) */
+    public function ruta(Request $request) { 
+        try { 
+            $coordinates = $request->input('coordinates'); 
+            
+            if (!$coordinates || count($coordinates) < 2) { 
+                return response()->json([ 
+                        'error' => 'Coordenadas inválidas' ], 400); 
+                        } 
+                
+            $response = Http::timeout(30) 
+                    ->post('http://localhost:8080/ors/v2/directions/foot-walking/geojson', [ 
+                        'coordinates' => $coordinates 
+                        ]); 
+                        
+                    
+                        return response()->json( 
+                            $response->json(), 
+                            $response->status() 
+                            
+                            ); 
+                            
+        } catch (\Exception $e) { 
+            return response()
+                ->json([ 'error' => $e->getMessage() ], 
+                500); 
+        } 
+                
     }
+
+
 }
-
-
-

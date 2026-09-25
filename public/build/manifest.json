@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BC5AiYqw.css",
+    "file": "assets/app-ZBHoMvpV.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -12,6 +12,12 @@
     "file": "assets/app-CcNNqum8.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/jsgeolinkmasivo.js": {
+    "file": "assets/jsgeolinkmasivo-D0jtjjg7.js",
+    "name": "jsgeolinkmasivo",
+    "src": "resources/js/jsgeolinkmasivo.js",
     "isEntry": true
   }
 }

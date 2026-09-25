@@ -11,7 +11,7 @@ class UsuarioController extends Controller
 {
    public function guardar(Request $request){
 
-        DB::table('glink.registro_users')->insert([
+        DB::table('registro_users')->insert([
             
             'usuario' => $request->usuario_registrado,
             'nombre' => $request->nombre,
@@ -29,7 +29,7 @@ class UsuarioController extends Controller
 
     public function datoaconsultar(Request $request){
         DB::connection('conexion_osp')
-        ->table('glink.punto_sencillo')
+        ->table('punto_sencillo')
         ->insert([
         'id_pre'=>$request->id_pre,
         'latitud'=> $request->latitud,
@@ -44,9 +44,11 @@ class UsuarioController extends Controller
         ]);
     }
 
+
+
     public function consultausuario(Request $request){
 
-        $usuario = DB::table('glink.registro_users')
+        $usuario = DB::table('registro_users')
             ->where('correo', $request->correo)
             ->exists();
 
@@ -58,7 +60,7 @@ class UsuarioController extends Controller
     }
     public function accesousuario(Request $request){
 
-        $usuario = DB::table('glink.registro_users')
+        $usuario = DB::table('registro_users')
             ->where('usuario', $request->usuario)
             ->first();
 
@@ -96,7 +98,7 @@ class UsuarioController extends Controller
     public function consultalocalidades(Request $request){
 
         $localidades = DB::connection('conexion_osp')
-            ->table('glink.osp_3gys')
+            ->table('osp_3gys')
             ->select('localidad')
             ->distinct()
             ->get();
@@ -105,10 +107,12 @@ class UsuarioController extends Controller
 
        
     }
+
+   
     public function lipiezatbpuntosencillo(Request $request){
 
         DB::connection('conexion_osp')
-            ->statement('TRUNCATE table glink.punto_sencillo');
+            ->statement('TRUNCATE table punto_sencillo');
 
         return response()->json([
 
@@ -124,7 +128,22 @@ class UsuarioController extends Controller
     {
         DB::connection('conexion_osp')
             ->statement("
-                UPDATE glink.punto_sencillo
+                UPDATE punto_sencillo
+                SET geom = ST_SetSRID(
+                    ST_MakePoint(longitud, latitud),
+                    4326
+                );
+            ");
+
+        return response()->json([
+            'mensaje' => 'Creación de datos en GEOM realizada correctamente.'
+        ]);
+    }
+    public function creaciongeommasivo(Request $request)
+    {
+        DB::connection('conexion_osp')
+            ->statement("
+                UPDATE punto_sencillo
                 SET geom = ST_SetSRID(
                     ST_MakePoint(longitud, latitud),
                     4326
@@ -154,8 +173,8 @@ class UsuarioController extends Controller
                     0 as lat_cto,
                     0 as long_cto,
                     '' as grupo_cto
-                FROM glink.osp_3gys AS b
-                JOIN glink.punto_sencillo AS c
+                FROM osp_3gys AS b
+                JOIN punto_sencillo AS c
                     ON b.localidad = c.ciudad
                 WHERE REPLACE(b.direccion_cli,' ','') = REPLACE(c.direccion,' ','')
                 LIMIT 1;");
@@ -168,6 +187,54 @@ class UsuarioController extends Controller
 
        
     }
+    public function carga_coordenadas(Request $request)
+        {
+            $pagina = (int) $request->input('pagina', 1);
+            $limite = 30000;
+
+            $offset = ($pagina - 1) * $limite;
+
+            $data = DB::connection('conexion_osp')->select("
+                SELECT 
+                    lat_equipo,
+                    long_equipo,
+                    puertos_libres_cto,
+                    CASE 
+                        WHEN puertos_libres_cto = 0 THEN '#ff0000'
+                        WHEN puertos_libres_cto BETWEEN 1 AND 4 THEN '#fffb01'
+                        ELSE '#66ff00'
+                    END AS color
+                FROM (
+                    SELECT 
+                        lat_equipo,
+                        long_equipo,
+                        MIN(puertos_libres_cto) AS puertos_libres_cto
+                    FROM osp_3gys
+                    WHERE lat_equipo IS NOT NULL
+                    AND long_equipo IS NOT NULL
+                    AND lat_equipo BETWEEN -4.3 AND 13.5
+                    AND long_equipo BETWEEN -79.1 AND -66.8
+                    AND cto like '%CT%'
+                    AND lat_equipo IS NOT NULL
+                    AND long_equipo IS NOT NULL
+                    GROUP BY 
+                        lat_equipo,
+                        long_equipo
+                ) t
+                ORDER BY 
+                    lat_equipo,
+                    long_equipo
+                LIMIT $limite
+                OFFSET $offset
+            ");
+
+            return response()->json([
+                'data' => $data,
+                'pagina' => $pagina,
+                'cantidad' => count($data),
+                'hay_mas' => count($data) === $limite
+            ]);
+        }
     
    
      public function consultadireccion(Request $request){
@@ -175,7 +242,7 @@ class UsuarioController extends Controller
         
         $data = DB::connection('conexion_osp')
             ->select("select cto, localidad, direccion_cli
-                        from glink.osp_3gys
+                        from osp_3gys
                         where cto like ?
                         group by direccion_cli, localidad, cto
                     ", ["%{$valor}%"]);
@@ -209,7 +276,7 @@ class UsuarioController extends Controller
                     CONCAT(o.latitud,',',o.longitud) as coordenadas,
                     CONCAT(o.longitud,',',o.latitud,',',o.nap_id) as coorde,
                     'ZA-FENIX' as grupo
-                FROM glink.punto_sencillo p
+                FROM punto_sencillo p
                 JOIN LATERAL (
                     SELECT *
                     FROM (
@@ -219,7 +286,7 @@ class UsuarioController extends Controller
                                 PARTITION BY o.armario_id 
                                 ORDER BY p.geom <-> o.geom
                             ) as rn
-                        FROM glink.consulta_fenix o
+                        FROM consulta_fenix o
                         WHERE 
                             ST_DWithin(p.geom::geography, o.geom::geography, 600)
                             and o.estadohilo > 1
@@ -258,7 +325,7 @@ class UsuarioController extends Controller
                             CONCAT(o.lat_equipo,' , ',o.long_equipo) as coordenadas,
 						    CONCAT(o.long_equipo,',',o.lat_equipo,',',o.cto) as coorde,
                             'ZA' as grupo
-                        FROM glink.punto_sencillo p
+                        FROM punto_sencillo p
                         JOIN LATERAL (
                             SELECT *
                             FROM (
@@ -268,7 +335,7 @@ class UsuarioController extends Controller
                                         PARTITION BY o.cto 
                                         ORDER BY p.geom <-> o.geom
                                     ) as rn
-                                FROM glink.osp_3gys o
+                                FROM osp_3gys o
                                 WHERE 
                                     ST_DWithin(p.geom::geography, o.geom::geography, 600)
                                     AND o.grupo_cto LIKE '%Abierta%'
@@ -278,7 +345,7 @@ class UsuarioController extends Controller
                             ) t
                             WHERE rn = 1   -- solo la más cercana por cada CTO
                             ORDER BY p.geom <-> t.geom
-                            LIMIT 2        -- ahora sí: 2 CTO diferentes
+                            LIMIT 2      -- ahora sí: 2 CTO diferentes
                         ) o ON TRUE
                         ORDER BY op1distanciacto;");
         
@@ -300,17 +367,17 @@ class UsuarioController extends Controller
 						o.proveedor AS op1feeder,
 						o.idplaca AS id_cto1,
 						o.cto AS op1cto,
-                        O.direccion_cli,
+                        o.direccion_cli,
 						ST_Distance(p.geom, o.geom)::numeric(10,2) AS op1distanciacto,
 						o.puertos_libres_cto AS op1dipscto,
 						CONCAT(o.lat_equipo,' , ',o.long_equipo) as coordenadas,
 						CONCAT(o.long_equipo,',',o.lat_equipo,',',o.cto) as coorde,
 						'ZC' as grupo
-                    FROM glink.punto_sencillo p
+                    FROM punto_sencillo p
                     JOIN LATERAL (
                       
                             SELECT o.*
-                            FROM glink.osp_3gys o
+                            FROM osp_3gys o
                             WHERE 
                                 ST_DWithin(p.geom, o.geom, 50)
                                 and o.grupo_cto  <> 'Zona Abierta'
@@ -343,9 +410,9 @@ class UsuarioController extends Controller
                             '-' AS puertos,
                             '-' AS op1_coinversor,
                             CONCAT(o.coordenada_x,',',o.coordenada_y) as coordenadas, -- COORDENDADA_X = LONGITUD COORDENDADA_Y = LATITUD
-                            CONCAT(o.coordenada_y,',',o.coordenada_x,',',o.terminal_fibra_optica_codigo) as coorde,
+                            CONCAT(o.coordenada_x,',',o.coordenada_y,',',o.terminal_fibra_optica_codigo) as coorde,
                             'EMP' AS consultaemp
-                        FROM glink.punto_sencillo p
+                        FROM punto_sencillo p
                         JOIN LATERAL (
                         SELECT *
                         FROM (
@@ -355,7 +422,7 @@ class UsuarioController extends Controller
                                     PARTITION BY o.terminal_fibra_optica_codigo
                                     ORDER BY p.geom <-> o.geom
                                 ) as rn
-                            FROM glink.emp_v2 o
+                            FROM emp_v2 o
                             WHERE 
                                 ST_DWithin(p.geom::geography, o.geom::geography, 1000)
                                 AND o.punto_acceso_tipo_punto_acceso LIKE '%Cámara%'
@@ -393,7 +460,7 @@ class UsuarioController extends Controller
                             CONCAT(o.lat,',',o.lon) as coordenadas,
                             CONCAT(o.lon,',',o.lat,',',o.modelo) as coorde,
                             'NODO' as consulta
-                        FROM glink.punto_sencillo p
+                        FROM punto_sencillo p
                         JOIN LATERAL (
                         SELECT *
                         FROM (
@@ -403,7 +470,7 @@ class UsuarioController extends Controller
                                     PARTITION BY o.nombre_equipo
                                     ORDER BY p.geom <-> o.geom
                                 ) as rn
-                            FROM glink.nodo_central o
+                            FROM nodo_central o
                             WHERE 
                                 ST_DWithin(p.geom::geography, o.geom::geography, 600)
                                 and p.respuesta is null

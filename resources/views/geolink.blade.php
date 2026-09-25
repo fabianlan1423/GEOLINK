@@ -13,7 +13,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    <title>GEOLIK CONSULTA</title>
+    <title>GEOLINK CONSULTA</title>
 </head>
 <body class="bod1">
     <input type="hidden" name="usuarioactual" id="usuarioactual">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div style="   text-align-last: start;">
-                    <p id="letbienvenida2" class= "transicion textobienvenida">Network Path Discovery</p>
+                    <p id="letbienvenida2" class= "transicion textobienvenida">CONSULTA PUNTO A PUNTO</p>
                 </div>
                 <div id="letbienvenida1" style="text-align: center; margin-top: 35px;">
                     <div class="spinner-border spiner" role="status">
@@ -45,6 +45,9 @@
             <div  id="menuprincipal" class="transicion" style="display: flex; gap: 35px; opacity: 0%; ">
                 
                 <div style="align-content: center; margin-right: 15px;">
+                    <p id="Menu" class="titulos_menu">Menu</p>
+                </div>
+                <div style="align-content: center; margin-right: 15px;">
                     <p id="salir" class="titulos_menu">Salir</p>
                 </div>
                <!-- <div style="align-content: center;">
@@ -54,6 +57,104 @@
             </div>
             
         </div>
+        <div  id="cuadropincipalinfo" class="transicion cuadroprincipal" style="justify-items: center; display: flex; gap: 5px;"><!--CUADRO PRINCIPAL V2 GEOLINK-->
+            <div style="height: 85vh; display: flex; gap: 3px;">
+                <div class="pestaniaaccesorapido"><!--Pestaña para acceso rapido-->
+                    <div class="botonselectmaps">
+                        <img id="iconocoordenada" src="{{ asset('img/busquedacoordenada.png')}}" alt="iconocoordenada" class="imgbtnmaps" title="Corsulta Por Coordenada">
+                    </div>
+                    <div class="botonselectmaps">
+                        <img id="iconodedireccion" src="{{ asset('img/busquedadireccion.png')}}" alt="iconodedireccion" class="imgbtnmaps" title="Consulta Por Direccion">
+                    </div>
+                    <div class="botonselectmaps">
+                        <img id="iconoexportexcel" src="{{ asset('img/export_excel.png')}}" alt="iconoexportexcel" class="imgbtnmaps" title="Exportar Consulta Realizada">
+                    </div>
+                               
+                    
+
+                </div>
+                <div class="cuadrobusqueda"><!--fron de consulta-->
+                    <div style="display: flex; background: rgb(67 67 73 / 34%); padding: 5px 0px 3px 0px; border-radius: 8px;"><!--Principal-->
+                        <div><!--TITULO-->
+                            <h5 id="titulobusqueda" style="color: white; margin-left: 10px; width: 40%;">Coordenada</h5>
+                        </div>
+                        <div><!--RED-->
+                            <div style="width: auto; height: 30px; align-self: flex-end; margin-left: 10px; display: flex; gap: 5px; width: 60%;">
+                                <div style="display: flex; gap: 10px; align-items: baseline;">
+                                    <p style="color: white;">COLTEL</p>
+                                    <input type="checkbox" id="coltel" name="coltel" checked>
+                                </div>
+                                <div style="display: flex; gap: 10px; align-items: baseline;">
+                                    <p style="color: white;">TIGO</p>
+                                    <input type="checkbox" id="tigo" name="tigo" >
+                                </div>
+                                <div style="display: flex; gap: 10px; align-items: baseline;">
+                                    <img src="{{ asset('img/retroceder.png')}}" alt="retroceder" style="margin-left: 20px; cursor: pointer; margin-top: 5px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                    <div><!--QUE ESTA CONSULTANDO-->
+                        <div id="panel" style="display: flex; gap: 5px; color: white; padding: 0px; height: 25px; margin-bottom: -10px;">
+                            
+                        </div>  
+                    </div>
+                    <div id="cuadrodecoordenadas" class="recuadrosmaps" style="max-height: 15% !important; margin-top: 2px !important;">
+                        <div class="form-floating mb-3 campo-pequeno" style="width:90%;">
+                            <input type="email" class="form-control" id="datocoordenada" placeholder="datocoordenada" style="font-size: 12px;">
+                            <label for="datocoordenada">Coordenadas</label>
+                        </div>
+                    </div>
+                    <div class="recuadrosmaps" id="cuadrodireccion" style="display: none;" >
+                        <div class="form-floating mb-3 "  style="width: 90%;">
+                            
+                            <input type="email" class="form-control" id="direccion" placeholder="Direccion">
+                            <label for="direccion">Direccion</label>
+                        </div>
+                        <div class="form-floating mb-3" style="width: 90%;">
+                            <select class="form-select" id="localidad">
+                                @foreach($localidades as $localidad)
+                                    <option value="{{ $localidad->localidad }}">
+                                        {{ $localidad->localidad }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <label for="localidad">Localidad</label>
+                        </div>
+                    </div>
+                    
+
+
+                </div>
+
+                <!-- <div style="display: flex; gap: 2px;">
+                    <div class="pestania">
+                        <p style="color: white;">Direccion</p>
+                    </div>
+                    <div class="pestania">
+                        <p style="color: white;">Coordenadas</p>
+                    </div>
+                    
+                </div> -->
+                <!-- <div>
+                    <div id="cuadrodedireccion" style="display: none;">
+                        
+                         
+                    </div>
+                    
+                </div> -->
+
+            </div>
+            <div class="cuadro_mapas" id="map"><!--cuadro de mapa-->
+            </div>
+            
+
+        </div>
+        
+
         <div id="cuadrotabladirecciones" class="cuadro_direcciones">
             <br>
             <div style="text-align: end; padding-right: 31px;">
@@ -81,9 +182,15 @@
 
         </div>
 
-        <div id="cuadropincipalinfo" class="transicion cuadroprincipal">
-            <div style="width:100%; margin-left: 35px; display:flex;">
-                <div style="width:25%;"><!--cuadro consultas-->
+        <div>
+            <div style="width:100%; margin-left: 35px;">
+                <div><!--CUADRO PRINCIPAL-->
+                    <div><!--cuadro de busqueda-->
+
+                    </div>
+                    
+                </div>
+                <div><!--cuadro consultas-->
                     <div class="cuadro_consultas">
                         <div style="display: none; gap: 10px;">
                             <div class="cuadroseleccion">
@@ -100,69 +207,27 @@
                             </div>
                             
                         </div>
-                        <div style="display: flex;">
-                            <div style="display: flex; gap: 10px; align-items: baseline;">
-                                <p style="color: white;">BASE OSP</p>
-                                <input type="checkbox" id="coltel" name="coltel" checked>
-                            </div>
-                            <div style="display: flex; gap: 10px; align-items: baseline; margin-left: 15px;">
-                                <p style="color: white;">BASE FENIX</p>
-                                <input type="checkbox" id="tigo" name="tigo" >
-                            </div>
+                       
+                        <div id="busquedadireccion" class="recuadros" style="width: 40%; gap: 5px; margin-top: -15px !important; " ><!--CUADRO DE DIRECCION-->
+                            
+                            
                         </div>
-                        <hr>
-                        <div style="display: flex; gap: 10px;">
-                            <div id="btnbusquedaddireccion" class="botonconsultadireccioncoordenada"><!--direccion-->
-                                <p style="color: white;">Direccion</p>
-                            </div>
-                            <div id="btnbusquedadcoordenada" class="botonconsultadireccioncoordenada"><!--coordenada-->
-                                <p style="color: white;">Coordenada</p>
-                            </div>
-                        </div>
-                        <hr style="color: white; margin-top: -1px; border: solid 2px; border-radius: 8px;">
-                        <div id="busquedadireccion" style="display: none;" class="recuadros">
-                            <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="direccion" placeholder="Direccion">
-                                <label for="direccion">Direccion</label>
-                            </div>
-                            <br>
-                            <select class="form-select form-select-lg mb-3" aria-label="Large select example" style="height: 59px;" id='localidad'>
-                                <option selected>Localidad</option>
-                                @foreach($localidades as $localidad)
-                                <option value="{{$localidad -> localidad}}">{{$localidad -> localidad}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div id="busquedacoordenada" style="display: block;" class="recuadros">
-                            <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="latitud" placeholder="Latitud">
-                                <label for="latitud">Latitud</label>
-                            </div>
-                            <br>
-                            <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="longitud" placeholder="Longitud">
-                                <label for="longitud">Longitud</label>
-                            </div>
+                        <div style="width: 1px; border: solid 2px; border-color: white;"></div>
+                        <div id="busquedacoordenada" style="display: flex; width: 30%; gap: 5px; justify-content: center;" class="recuadros"><!--CUADRO DE DIRECCION-->
+                            
+                            
                         </div>
                         <br>
-                        <div style="width: 100%; text-align: center;">
+                        <div style="width: 100%; text-align: center; width: 10%; align-content: center; margin-top: 20px;"><!--CUADRO DE DIRECCION-->
                             <input class="btn_ingreso" type="button" id="consultacoordenadas" value="CONSULTAR">
                         </div>
                         
                     </div>
                     <div><!--Consulta Cordenedas-->
-                        <div><!--QUE ESTA CONSULTANDO-->
-                            <div id="panel" style="display: flex; gap: 5px; color: white;"></div>  
-                        </div>
+                        
                     </div>
                 </div>
-                <div style="width:75%; "><!--cuadro mapa-->
-                    
-                    <div class="cuadro_mapas" id="map">
-                    </div>
-                    
-                    
-                </div>
+                
             </div>
             <div id="cuadroaviso" class="cuadroaviso">
                 
@@ -307,6 +372,45 @@
 <script>
 
 
+// iconoexportexcel iconodedireccion iconocoordenada
+
+// $("img").each(function  () {
+
+//     $ttttt   
+     
+ 
+// });
+
+
+$("p").each(function () {
+
+     $(this).click(function () {
+            let menubusqueda = $(this).text();
+
+            if(menubusqueda == 'Direccion'){
+                $('#cuadrodedireccion').css('display','block')
+                $('#cuadrodecoordenadas').css('display','none')
+            }
+            if(menubusqueda == 'Coordenadas'){
+                $('#cuadrodecoordenadas').css('display','block')
+                $('#cuadrodedireccion').css('display','none')
+            }
+            
+     
+     
+        });
+
+   
+});
+
+
+$('#Menu').click(function () {
+   
+    window.location.href = '/menu';
+    
+  });
+
+
 function aplicarColumnas() {
 
     $('.chkColumna').each(function () {
@@ -410,7 +514,7 @@ function limpiarRutas() {
 
     if($('#usuarioactual').val() === ''){
         
-        alert('Ingrese usuario Y contraseña para acceder a GEOLIK')
+        alert('Ingrese usuario Y contraseña para acceder a GEOLINK')
         window.location.href = '/';
     }
 
@@ -450,19 +554,50 @@ function limpiarRutas() {
 
     });
     
-     var map = L.map('map').setView([4.696611, -74.070353], 18);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'OpenStreetMap'
-        }).addTo(map);
+    var mapaOSM = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '&copy; OpenStreetMap contributors'
+        }
+    );
+
+    var mapaSatelital = L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        {
+            attribution: 'Proveedor de imágenes'
+        }
+    );
+
+    var map = L.map('map', {
+        center: [4.696611, -74.070353],
+        zoom: 18,
+        minZoom: 3,
+        maxZoom: 18,
+        layers: [mapaOSM]
+    });
+
+    
+
+    L.control.layers({
+        "Mapa    ": mapaOSM,
+        "Satélite": mapaSatelital
+    }, null, {
+        position: 'bottomright'
+    }).addTo(map);
+
+
+
+    
 
    
     async function ejecutarConsultas(fenix) {
 
         try {
-
+            
             await zc();
             await za();
             if (fenix.is(':checked')) {
+                alert('zatigo')
                 await zatigo();
             }
             await emp();
@@ -485,19 +620,49 @@ function limpiarRutas() {
 
     async function consulta() {
 
-        const direcc = $('#direccion').val();
-        const lat = $('#latitud').val();
-        const long = $('#longitud').val();
+        const direcc = $('#direccion').val().trim();
+        const datocoordenada = $('#datocoordenada').val().trim();
+
+     
+
+        // ==========================================================
+        // VALIDAR QUE EXISTA AL MENOS COORDENADA O DIRECCIÓN
+        // ==========================================================
+
+        if (!datocoordenada && !direcc) {
+
+            alert('Ingrese datos de Coordenadas o Dirección para proceso GEOLINK');
+
+            return;
+        }
+
+        // ==========================================================
+        // VARIABLES DE COORDENADAS
+        // ==========================================================
+
+        let lat = '';
+        let long = '';
+
+        if (datocoordenada) {
+
+            const coordenadas = datocoordenada.split(',');
+
+            if (coordenadas.length < 2) {
+
+                alert('Las coordenadas deben tener el formato: latitud,longitud');
+
+                return;
+            }
+
+            lat = coordenadas[0].trim().replace(',', '.');
+            long = coordenadas[1].trim().replace(',', '.');
+        }
+
         const fenix = $('#tigo');
 
         limpiezarespuesta();
         limpiarRutas();
         $('#tbrespuesta tbody').empty();
-
-        if (!lat && !long && !direcc) {
-            alert('Ingrese datos de Coordenadas o Dirección para proceso GEOLINK');
-            return;
-        }
 
         try {
 
@@ -574,15 +739,35 @@ function limpiarRutas() {
 
             console.error('ERROR GENERAL EN CONSULTA:', error);
 
-            alert(
-                'Ocurrió un error durante el proceso de consulta.'
-            );
+            alert('Ocurrió un error durante el proceso de consulta.');
         }
     }
     
     
-    
-    $('#consultacoordenadas').click(consulta) 
+     $('#datocoordenada').on('keydown', function (e) {  
+
+            if(e.key == 'Enter'){
+                alert('ENTER')
+                consulta()
+            }
+
+     });
+
+    $('#localidad').change(function (){
+            const direccion = $('#direccion').val()
+           
+
+            if(direccion == ''){
+                alert('Ingrese una dirección antes de seleccionar la localidad para realizar la búsqueda.')
+                $('#localidad').prop('selectedIndex',0)
+                return
+            }else{
+                consulta()
+            }
+
+    });
+
+
 
 
     function limpiezarespuesta() {
@@ -619,8 +804,12 @@ function limpiarRutas() {
     }
     function consultacoordenada() {
 
-        const latitud = $('#latitud').val();
-        const longitud = $('#longitud').val();
+        const datocoordenada = $('#datocoordenada').val().trim();
+        const coordenadas = datocoordenada.split(',');
+        
+        const latitud =  coordenadas[0].trim().replace(',', '.');
+        const longitud =  coordenadas[1].trim().replace(',', '.');
+
         const direccion = $('#direccion').val();
         const localidad = $('#localidad').val();
 
@@ -1006,8 +1195,14 @@ function limpiarRutas() {
         cuadroconsulta.css('display','block');
         cuadroconsulta.text('Ejecutando consulta Nodos.');
 
-        const lat = $('#latitud');
-        const long = $('#longitud');
+        const datocoordenada = $('#datocoordenada').val().trim();
+        const coordenadas = datocoordenada.split(',');
+        
+        const latitud =  coordenadas[0].trim().replace(',', '.');
+        const longitud =  coordenadas[1].trim().replace(',', '.');
+
+        const lat = $('#datocoordenada');
+        const long = $('#datocoordenada');
 
         return $.ajax({
 
@@ -1164,16 +1359,20 @@ function limpiarRutas() {
             // ==========================
             // COORDENADAS CLIENTE
             // ==========================
-            const latitud = parseFloat($('#latitud').val());
+            const datocoordenada = $('#datocoordenada').val().trim();
+            const coordenadas = datocoordenada.split(',');
+            
+            const latitud =  parseFloat(coordenadas[0].trim().replace(',', '.'));
+            const longitud =  parseFloat(coordenadas[1].trim().replace(',', '.'));
 
-            const longitud = parseFloat($('#longitud').val());
-
+            
             // ==========================
             // COORDENADAS DESTINO
             // ==========================
             const coordenada = $(checkbox).val();
 
             console.log(coordenada);
+            
 
             if(!coordenada){
 
@@ -1329,9 +1528,6 @@ function limpiarRutas() {
 
         let totalDistance2 = segmento2.distance;
 
-
-
-
                 // ==========================
                 // DIBUJAR RUTA
                 // ==========================
@@ -1366,6 +1562,7 @@ function limpiarRutas() {
                 // ==========================
                 map.fitBounds(routeLayer.getBounds());
 
+                
                 // ==========================
                 // INFORMACIÓN
                 // ==========================

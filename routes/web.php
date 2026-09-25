@@ -1,27 +1,63 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\cargadatoscontroller;
+use App\Http\Controllers\consultamasiva;
 use App\Http\Controllers\RutaController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use PhpParser\Node\Stmt\Return_;
 
 /*Route::get('/', function () {
     return view('welcome');
 });*/
+
+// Route::post('\usuarioconectado', function (Request $request){
+//     return View
+// })->name('usuarioconecta');
+
 Route::get('/', function () {
     return view('registro');
 });
 
+
 Route::get('/geolink', function () {
     return view('geolink');
 })->name('consulta');
+
+Route::get('/mapacalor', function () {
+    return view('mapacalor');
+})->name('mapacalor');
+
+Route::get('/geolinkmasivo', function () {
+    return view('geolinkmasivo');
+})->name('geolinkmasivo');
+
+// apertura a menu principal GEOLINK
+Route::get('/menu', function () {
+    return View('menu');
+});
+
 
 Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome');
 
 
+
+
+
 // rutas para interaccion con bases de datos 
+
+Route::post('/carga_coordenadas',
+    [UsuarioController::class, 'carga_coordenadas']
+);
+Route::post('/carga-datos',
+    [cargadatoscontroller::class, 'carga']
+);
+
 
 Route::post('/registro_usuario',
     [UsuarioController::class,'guardar']
@@ -73,6 +109,29 @@ Route::post('/consultnodo',
 Route::post('/zatigo', 
     [UsuarioController::class, 'consultazatigo']
 );
+
+Route::post('/geomproyec', 
+    [consultamasiva::class, 'datogeomproyec']
+);
+Route::post('/zamasivo', 
+    [consultamasiva::class, 'consultazamasivo']
+);
+Route::post('/zcmasivo', 
+    [consultamasiva::class, 'consultazcmasivo']
+);
+Route::post('/nodomasivo', 
+    [consultamasiva::class, 'consultanodomasivo']
+);
+Route::post('/fenixmasivo', 
+    [consultamasiva::class, 'consultafenixmasivo']
+);
+Route::post('/limpiatabla', 
+    [consultamasiva::class, 'limpieza']
+);
+Route::post('/exportaarchivo', 
+    [consultamasiva::class, 'exportarRespuestaCsv']
+);
+
 
 
 
