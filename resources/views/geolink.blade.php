@@ -61,20 +61,28 @@
             <div style="height: 85vh; display: flex; gap: 3px;">
                 <div class="pestaniaaccesorapido"><!--Pestaña para acceso rapido-->
                     <div class="botonselectmaps">
-                        <img id="iconocoordenada" src="{{ asset('img/busquedacoordenada.png')}}" alt="iconocoordenada" class="imgbtnmaps" title="Corsulta Por Coordenada">
+                        <span class="titlemodif" data-tooltip="Consulta Por Coordenada">
+                            <img 
+                                id="iconocoordenada" 
+                                src="{{ asset('img/busquedacoordenada.png')}}" 
+                                alt="iconocoordenada" 
+                                class="imgbtnmaps"
+                            >
+                        </span>
                     </div>
                     <div class="botonselectmaps">
-                        <img id="iconodedireccion" src="{{ asset('img/busquedadireccion.png')}}" alt="iconodedireccion" class="imgbtnmaps" title="Consulta Por Direccion">
+                        <span class="titlemodif" data-tooltip="Consulta Por Coordenada">
+                            <img id="iconodedireccion" src="{{ asset('img/busquedadireccion.png')}}" alt="iconodedireccion" class="imgbtnmaps titlemodif" data-tooltip1="Consulta Por Direccion">
+                        </span>
                     </div>
                     <div class="botonselectmaps">
-                        <img id="iconoexportexcel" src="{{ asset('img/export_excel.png')}}" alt="iconoexportexcel" class="imgbtnmaps" title="Exportar Consulta Realizada">
+                        <span class="titlemodif" data-tooltip="Consulta Por Coordenada">
+                            <img id="iconoexportexcel" src="{{ asset('img/export_excel.png')}}" alt="iconoexportexcel" class="imgbtnmaps titlemodif" data-tooltip2="Exportar Consulta Realizada">
+                        </span>
                     </div>
-                               
-                    
-
                 </div>
                 <div class="cuadrobusqueda"><!--fron de consulta-->
-                    <div style="display: flex; background: rgb(67 67 73 / 34%); padding: 5px 0px 3px 0px; border-radius: 8px;"><!--Principal-->
+                    <div style="height: 8%; display: flex; background: rgb(67 67 73 / 34%); padding: 5px 0px 3px 0px; border-radius: 8px;"><!--Principal-->
                         <div><!--TITULO-->
                             <h5 id="titulobusqueda" style="color: white; margin-left: 10px; width: 40%;">Coordenada</h5>
                         </div>
@@ -86,7 +94,7 @@
                                 </div>
                                 <div style="display: flex; gap: 10px; align-items: baseline;">
                                     <p style="color: white;">TIGO</p>
-                                    <input type="checkbox" id="tigo" name="tigo" >
+                                    <input type="checkbox" id="tigo" name="tigo" checked >
                                 </div>
                                 <div style="display: flex; gap: 10px; align-items: baseline;">
                                     <img src="{{ asset('img/retroceder.png')}}" alt="retroceder" style="margin-left: 20px; cursor: pointer; margin-top: 5px;">
@@ -98,20 +106,20 @@
                         </div>
                     </div>
                     <div><!--QUE ESTA CONSULTANDO-->
-                        <div id="panel" style="display: flex; gap: 5px; color: white; padding: 0px; height: 25px; margin-bottom: -10px;">
+                        <div id="panel" style="display: flex; gap: 5px; color: white; padding: 0px; height: 10px; margin-bottom: -10px;">
                             
                         </div>  
                     </div>
                     <div id="cuadrodecoordenadas" class="recuadrosmaps" style="max-height: 15% !important; margin-top: 2px !important;">
                         <div class="form-floating mb-3 campo-pequeno" style="width:90%;">
-                            <input type="email" class="form-control" id="datocoordenada" placeholder="datocoordenada" style="font-size: 12px;">
+                            <input type="text" class="form-control" id="datocoordenada" placeholder="datocoordenada" style="font-size: 12px;">
                             <label for="datocoordenada">Coordenadas</label>
                         </div>
-                    </div>
-                    <div class="recuadrosmaps" id="cuadrodireccion" style="display: none;" >
+                    </div> 
+                    <div class="recuadrosmaps" id="cuadrodireccion" style="display: none; max-height: auto !important; margin-top: 2px !important;" >
                         <div class="form-floating mb-3 "  style="width: 90%;">
                             
-                            <input type="email" class="form-control" id="direccion" placeholder="Direccion">
+                            <input type="text" class="form-control" id="direccion" placeholder="Direccion">
                             <label for="direccion">Direccion</label>
                         </div>
                         <div class="form-floating mb-3" style="width: 90%;">
@@ -123,6 +131,57 @@
                                 @endforeach
                             </select>
                             <label for="localidad">Localidad</label>
+                        </div>
+                    </div>
+                    <div class="recuadrosmaps" id="cudroexcel" style="display: none; max-height: 15% !important; margin-top: 2px !important;" >
+                          <!--SELECCION DE COLUMNAS A EXPORTAR EN INFORME DE EXCEL-->
+                          
+                    </div>
+                     <div class="recuadrosmaps" id="cuadrorespuesta" style="text-align: -webkit-center; width: 100%; height: auto; max-height: 73% !important; margin-top: 2px !important;" ><!--CUADRO DE RESPUESTA AL USUARIO-->
+                        <div style="width: 95%;">
+                            <div class="lin1respu">
+                                <div style="width: 20%; padding-left: 8px; background: #0a0aa163; border-radius: 8px 0px 0px 0px;">
+                                    <p>ZA</p>
+                                </div>
+                                <div style="width: 40%; text-align: center;">
+                                    <p>Mendio: FFTH</p>
+                                </div>
+                                <div style="width: 40%; text-align: center;">
+                                    <p>Dist: 40.62 mtr</p>
+                                </div>
+                            </div>
+                            <div class="lin2respu"><!--linea 1-->
+                                <div style="width: 5%; text-align: center;">
+                                    <input type="checkbox" value="" onchange="ruta(this)">
+                                </div>
+                                
+                                <div style="width: 20%; text-align: center;">
+                                    <p title="ID">ID: 990201</p>
+                                </div>
+                                <div style="width: 60%; text-align: center;">
+                                    <p title="DESTINO">Dest: CGDOS-CT4/5-83-02</p>
+                                </div>
+                                
+                                <div style="width: 10%; text-align: center;">
+                                    <p title="PUERTOS DISPONIBLES">PD: 6</p>
+                                </div>
+                            </div>
+                            <div class="lin3respu"><!--linea 2-->
+                                <div>
+                                    <p title="DIRECCION">CL 63 s KR 81 11 |</p>
+                                </div>
+                                <div>
+                                    <p title="RED" >ONNET |</p>
+                                </div>
+                            </div>
+                            <div class="lin4respu"><!--linea 2-->
+                                <div>
+                                    <p title="olt">OH_BOGALGDOC_I_7360_CentrodeGravedad2_3 | </p>
+                                </div>
+                                <div>
+                                    <P title="NODO">|</P>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -380,6 +439,57 @@
      
  
 // });
+consultacolum();
+
+function consultacolum(){
+
+    $.ajax({
+        url:'/consultacolum',
+        method:'POST',
+        data:{
+             _token:$('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            console.log(response.data);
+            alert(JSON.stringify(response.data, null, 2));
+        },
+        error: function (xhr, error) { 
+
+         }
+    })
+
+}
+
+$("img").each(function () {  
+
+    $(this).click(function (){
+
+        let id = $(this).attr('id');
+        const cuadrodecoordenadas = $('#cuadrodecoordenadas') 
+        const cuadrodireccion = $('#cuadrodireccion') 
+        const cudroexcel = $('#cudroexcel') 
+
+        if(id == 'iconocoordenada'){
+            cuadrodecoordenadas.css('display','block')
+            cuadrodireccion.css('display','none')
+            cudroexcel.css('display','none')
+           
+        }
+        if (id == 'iconodedireccion') {
+            cuadrodecoordenadas.css('display','none')
+            cuadrodireccion.css('display','block')
+            cudroexcel.css('display','none')
+        }
+        if (id == 'iconoexportexcel') {
+            cuadrodecoordenadas.css('display','none')
+            cuadrodireccion.css('display','none')
+            cudroexcel.css('display','block')
+        }
+
+    })
+
+
+})
 
 
 $("p").each(function () {
@@ -1151,6 +1261,10 @@ function limpiarRutas() {
                     let html = '';
 
                     response.data.forEach(function(item){
+
+                        $('#cuadrorespuesta').append(`
+                            <input type="text" id="${item.direccion_cli}" value="${item.direccion_cli}">
+                        `);
 
                         html += `
                             <tr>

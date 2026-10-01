@@ -109,6 +109,12 @@ Route::post('/consultnodo',
 Route::post('/zatigo', 
     [UsuarioController::class, 'consultazatigo']
 );
+Route::post('/consultacolum', 
+    [UsuarioController::class, 'consultacolumnas']
+);
+
+
+
 
 Route::post('/geomproyec', 
     [consultamasiva::class, 'datogeomproyec']

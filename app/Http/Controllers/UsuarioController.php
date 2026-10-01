@@ -409,7 +409,7 @@ class UsuarioController extends Controller
                             o.propietario AS feeder,
                             '-' AS puertos,
                             '-' AS op1_coinversor,
-                            CONCAT(o.coordenada_x,',',o.coordenada_y) as coordenadas, -- COORDENDADA_X = LONGITUD COORDENDADA_Y = LATITUD
+                            CONCAT(o.coordenada_y,',',o.coordenada_x) as coordenadas, -- COORDENDADA_X = LONGITUD COORDENDADA_Y = LATITUD
                             CONCAT(o.coordenada_x,',',o.coordenada_y,',',o.terminal_fibra_optica_codigo) as coorde,
                             'EMP' AS consultaemp
                         FROM punto_sencillo p
@@ -434,6 +434,26 @@ class UsuarioController extends Controller
         
         return response()->json([
             'data'=>$data
+        ]);
+        
+
+    }
+    public function consultacolumnas(Request $request){
+
+        $data = DB::connection('conexion_osp')
+        ->select("SELECT 
+                        column_name
+                    FROM information_schema.columns
+                    WHERE table_schema = 'public'
+                    AND table_name = 'punto_sencillo'
+                    ORDER BY ordinal_position;");
+        
+        $columnas = array_map(function ($item) {
+            return $item->column_name;
+        }, $data);
+
+        return response()->json([
+            'data' => $columnas
         ]);
         
 
