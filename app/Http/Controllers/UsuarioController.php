@@ -28,21 +28,30 @@ class UsuarioController extends Controller
     }
 
     public function datoaconsultar(Request $request){
+    try {
+
         DB::connection('conexion_osp')
-        ->table('punto_sencillo')
-        ->insert([
-        'id_pre'=>$request->id_pre,
-        'latitud'=> $request->latitud,
-        'longitud'=> $request->longitud,
-        'direccion'=> $request->direccion,
-        'ciudad'=> $request->localidad
+            ->table('punto_sencillo')
+            ->insert([
+                'latitud'    => $request->latitud,
+                'longitud'   => $request->longitud,
+                'direccion'  => $request->direccion,
+                'ciudad'     => $request->localidad
+            ]);
 
+        return response()->json([
+            'mensaje' => 'Coordenadas agregadas a tabla'
+        ]);
 
-        ]);
-         return response()->json([
-            'mensaje' => 'Cordenadas agregadas a tabla'
-        ]);
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'error' => $e->getMessage(),
+            'linea' => $e->getLine(),
+            'archivo' => $e->getFile()
+        ], 500);
     }
+}
 
 
 
@@ -159,25 +168,30 @@ class UsuarioController extends Controller
     public function consultapordireccion(Request $request){
 
         $data = DB::connection('conexion_osp')
-            ->select("SELECT 
-	                CONCAT(c.latitud,' , ',c.longitud) as coordenadas,
-                    c.direccion,
-                    b.proveedor AS op1_coinversor,
-                    b.olt_no AS op1olt,
-                    b.proveedor AS op1feeder,
-                    b.idplaca AS id_cto1,
-                    b.cto AS op1cto,
-                    b.direccion_cli,
-                    '0' AS op1distanciacto,
-                    b.puertos_libres_cto AS op1dipscto,
-                    0 as lat_cto,
-                    0 as long_cto,
-                    '' as grupo_cto
-                FROM osp_3gys AS b
-                JOIN punto_sencillo AS c
-                    ON b.localidad = c.ciudad
-                WHERE REPLACE(b.direccion_cli,' ','') = REPLACE(c.direccion,' ','')
-                LIMIT 1;");
+            ->select("SELECT DISTINCT ON (b.direccion_cli)
+                        'DIRECCION' AS medi,
+                        b.idplaca AS id_cto1,
+                        b.cto AS op1cto,
+                        b.direccion_cli,
+                        '0' AS op1distanciacto,
+                        b.proveedor AS op1feeder,
+                        b.puertos_libres_cto AS op1dipscto,
+                        '' AS NODO,
+                        CONCAT(b.lat_equipo, ' , ', b.long_equipo) AS coordenadas,
+                        CONCAT(b.long_equipo, ',', b.lat_equipo, ',', b.cto) AS coorde,
+                        
+                        c.direccion,
+                        b.proveedor AS op1_coinversor,
+                        b.olt_no AS op1olt,
+                        0 AS lat_cto,
+                        0 AS long_cto,
+                        '' AS grupo_cto
+                    FROM osp_3gys AS b
+                    JOIN punto_sencillo AS c
+                        ON b.localidad = c.ciudad
+                    WHERE REPLACE(b.direccion_cli, ' ', '') 
+                        LIKE CONCAT('%', REPLACE(c.direccion, ' ', ''), '%')
+                    ORDER BY b.direccion_cli;");
 
         return response()->json([
             'data' => $data 
@@ -410,7 +424,7 @@ class UsuarioController extends Controller
                             '-' AS puertos,
                             '-' AS op1_coinversor,
                             CONCAT(o.coordenada_y,',',o.coordenada_x) as coordenadas, -- COORDENDADA_X = LONGITUD COORDENDADA_Y = LATITUD
-                            CONCAT(o.coordenada_x,',',o.coordenada_y,',',o.terminal_fibra_optica_codigo) as coorde,
+                            CONCAT(o.coordenada_y,',',o.coordenada_x,',',o.terminal_fibra_optica_codigo) as coorde,
                             'EMP' AS consultaemp
                         FROM punto_sencillo p
                         JOIN LATERAL (

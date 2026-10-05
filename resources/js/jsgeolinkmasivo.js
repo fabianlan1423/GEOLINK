@@ -42,6 +42,7 @@ async function procesos(){
     const btnfenix = $('#FENIX');
     const descargaexcel = $('#descargaexcel');
     const estadocarguemasivo = $('#estadocarguemasivo');
+    const letraagua = $('#letraagua');
 
     try {
 
@@ -111,8 +112,11 @@ async function procesos(){
             
             "<br><br>🏁 <b>Consulta masiva terminada.</b>"
             
+
+            
         );
             descargaexcel.css('display','block')
+            letraagua.css('display','none')
 
     } catch(error) {
 
@@ -362,7 +366,7 @@ $('#procesarinfo').on('click', async function (e){
 
     const estadocarguemasivo = $('#estadocarguemasivo');
     const btnza = $('#ZA')
-
+    const letraagua  = $('#letraagua')
     e.preventDefault();
 
     const archivo = $('#cargaarchivo')[0].files[0];
@@ -371,6 +375,8 @@ $('#procesarinfo').on('click', async function (e){
         alert('Seleccione Archivo a procesar');
         return
     }
+
+    letraagua.css('display','block');
 
     const formdata = new FormData()
 
@@ -397,6 +403,7 @@ $('#procesarinfo').on('click', async function (e){
         geomproyecto();
         procesos();
         
+        
             
         
 
@@ -405,7 +412,7 @@ $('#procesarinfo').on('click', async function (e){
         
         alert(error)
         console.log('Error en proceso: '+error)
-
+        letraagua.css('display','none');
          estadocarguemasivo.text('Error cargando el archivo')    
 
     }

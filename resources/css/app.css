@@ -12,6 +12,34 @@
 
 /*Estilo de barra de menu general para APLICATIVO*/
 
+.bordesuperior{
+    text-align: end;
+    padding-right: 31px;
+    background: #222744;
+    border-radius: 10px 10px 0px 0px;
+
+}
+
+.cuadroelementosrespuesta {
+    text-align: -webkit-center;
+    width: 100%;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    margin-top: 2px !important;
+    height: auto;
+    max-height: 50vh;
+
+    margin-top: 15px !important;
+    border-color: white !important;
+    padding: 8px !important;
+    border-radius: 8px 8px 8px 8px !important;
+    width: 100%; 
+    justify-items: center; 
+    background: #64636675; 
+    align-content: center; 
+    
+}
+
 .lin1respu {
     display: flex;
     gap: 5px;
@@ -24,6 +52,7 @@
     color: white;
     font-weight: 600;
     border-radius: 8px 8px 0px 0px;
+    border: solid 1px #9e9898;
 }
 .lin2respu {
     display: flex;
@@ -35,6 +64,8 @@
     color: white;
     background: #64636687;
     padding-top: 10px;
+    border-left: solid 1px #9e9898;
+    border-right: solid 1px #9e9898;
 }
 .lin3respu {
     display: flex;
@@ -45,6 +76,10 @@
     height: 20px;
     color: white;
     background: #64636687;
+    border-left: solid 1px #9e9898;
+    border-right: solid 1px #9e9898;
+    border-bottom: solid 1px #9e9898;
+    
     
 }
 .lin4respu {
@@ -253,6 +288,7 @@
     
 }
 
+
 .cuadro50porcen{
 
     width: 50%;
@@ -459,14 +495,34 @@
 
 .cuadrobusqueda {
     width: 50vh;
-    height: 80%;
+    height: 90%;
     background: #434349b7;
     position: absolute;
-    margin-left: 8vh;
+    margin-left: 9vh;
     margin-top: 25px;
     border-radius: 8px;
     z-index: 1005 !important;
+    transition: all 1s;
 }
+.botonaparecer{
+    opacity: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #646366;
+    margin-left: 3vh;
+    position: absolute;
+    margin-top: 28px;
+    border-radius: 50%;
+    z-index: 0;
+    align-content: center;
+    justify-items: center;
+    translate: 308px;
+    rotate: 180deg;
+    
+    transition: all 1s;
+}
+
+
 
 #panelbusqueda {
     top: 10px;
@@ -709,18 +765,21 @@ th:last-child{
 }
 
 .cuadro_direcciones{
-    position: absolute;
+    position: fixed;
+    top: 20vh;
+    left: 10vh;
+    transform: translate(-10%, -50%);
     width: 53%;
     height: 65%;
     background: #1f2937;
     border-radius: 10px;
-    z-index: 9999;
+    z-index: -9999;
     margin-left: 23%;
 
     /* Estado oculto */
     opacity: 0;
     transform: translateY(-50px) scale(0.8);
-    visibility: hidden;
+    /* visibility: hidden; */
 
     transition: all 0.6s ease;
 }
@@ -729,6 +788,7 @@ th:last-child{
     opacity: 1;
     transform: translateY(0) scale(1);
     visibility: visible;
+    z-index: 100000;
 
     box-shadow: 0 0 30px #6ec7ec;
 }
@@ -832,6 +892,7 @@ th:last-child{
     border-radius: 15px;
     align-content: center;
     display: none;
+    text-align-last: center;
 }
 
 
@@ -866,24 +927,24 @@ th:last-child{
 }
 
 .cargaarchivocirculo1{
-    cursor: pointer; 
-    width: 70px; 
-    height: 70px; 
-    background:grey; 
-    border-radius: 50%;  
-    justify-items: center; 
-    align-content: center; 
+    cursor: pointer;
+    width: 115px;
+    height: 35px;
+    background: grey;
+    border-radius: 8px;
+    justify-items: center;
+    align-content: center;
     border: solid 1px;
     border-color: #6ec7ec;
 }
 
 .cargaarchivocirculo{
-    width: 90px; 
-    height: 90px; 
-    background: grey; 
-    border-radius: 50%; 
-    justify-items: center; 
-    align-content: center; 
+        width: 120px;
+    height: 40px;
+    background: grey;
+    border-radius: 8px;
+    justify-items: center;
+    align-content: center;
    
 }
 
@@ -906,7 +967,7 @@ th:last-child{
     color: white !important;
 }
 .cuadrocant{
-    background: #6ec7ec;
+    background: #f0f0f0;
     height: 90%;
     width: 40px;
     border-radius: 8px;
@@ -929,4 +990,402 @@ th:last-child{
 }
 
 
+/* boton de cierre */
 
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #141926;
+  font-family: Helvetica, Arial, sans-serif; 
+}
+
+.outer {
+    position: absolute;
+    right: 40px;
+    width: 20px;
+    height: 30px;
+    cursor: pointer;
+    top: 5px;
+}
+
+.inner {
+  width: inherit;
+  text-align: center;
+  height: 30px;
+}
+
+.labelcierre { 
+    font-size: .8em; 
+    line-height: 4em;
+    text-transform: uppercase;
+    color: #fff;
+    transition: all .3s ease-in;
+    opacity: 0;
+    cursor: pointer;
+    position: relative;
+    height: 30px;
+    top: -12px;
+    left: -14px;
+}
+
+.inner:before, .inner:after {
+  position: absolute;
+  content: '';
+  height: 1px;
+  width: inherit;
+  background: #ffffff;
+  left: 0;
+  transition: all .3s ease-in;
+}
+
+.inner:before {
+  top: 50%; 
+  transform: rotate(45deg);  
+}
+
+.inner:after {  
+  bottom: 50%;
+  transform: rotate(-45deg);  
+}
+
+.outer:hover label {
+  opacity: 1;
+}
+
+.outer:hover .inner:before,
+.outer:hover .inner:after {
+  transform: rotate(0);
+}
+
+.outer:hover .inner:before {
+  top: 0;
+}
+
+.outer:hover .inner:after {
+  bottom: 0;
+}
+
+
+
+.titulo {
+    font-family: "Open Sans", sans-serif;
+    color: white;
+    font-weight: 300;
+    
+}
+
+/* Todo el contenido generado por DataTables */
+#datospordireccion_wrapper {
+    color: white;
+}
+
+/* Texto "Buscar:" */
+#datospordireccion_wrapper .dt-search {
+    color: white;
+}
+
+/* Input de búsqueda */
+#datospordireccion_wrapper .dt-search input {
+    color: white;
+    background-color: transparent;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    margin-right: 15px;
+    
+}
+
+/* Placeholder del buscador */
+#datospordireccion_wrapper .dt-search input::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+/* Selector "Mostrar 10 registros" */
+#datospordireccion_wrapper .dt-length {
+    color: white;
+    margin-left: 15px;
+}
+
+/* Select de cantidad */
+#datospordireccion_wrapper .dt-length select {
+    color: white;
+    background-color: transparent;
+}
+
+/* Información inferior */
+#datospordireccion_wrapper .dt-info {
+    color: white;
+}
+
+/* Paginación */
+#datospordireccion_wrapper .dt-paging {
+    color: white;
+}
+
+/* Botones de paginación */
+#datospordireccion_wrapper .dt-paging button {
+    color: white !important;
+}
+
+/* Texto de la tabla */
+#datospordireccion tbody {
+    color: white;
+}
+
+/* Encabezados */
+#datospordireccion thead {
+    color: white;
+}
+
+
+/*Efecto de agua en letra*/
+
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", sans-serif;
+}
+
+body {
+	display: flex;
+	background: #000;
+	min-height: 100vh;
+	align-items: center;
+	justify-content: center;
+}
+
+.content {
+	position: relative;
+    font-size: 10px;
+    
+}
+
+.content h2 {
+	color: #fff;
+	font-size: 8em;
+	position: absolute;
+	transform: translate(20%, -0%);
+}
+
+.content h2:nth-child(1) {
+	color: transparent;
+	-webkit-text-stroke: 2px #f7f7f7;
+}
+
+.content h2:nth-child(2) {
+	color: #dfdee0;
+	animation: animate 4s ease-in-out infinite;
+}
+
+@keyframes animate {
+	0%,
+	100% {
+		clip-path: polygon(
+			0% 45%,
+			16% 44%,
+			33% 50%,
+			54% 60%,
+			70% 61%,
+			84% 59%,
+			100% 52%,
+			100% 100%,
+			0% 100%
+		);
+	}
+
+	50% {
+		clip-path: polygon(
+			0% 60%,
+			15% 65%,
+			34% 66%,
+			51% 62%,
+			67% 50%,
+			84% 45%,
+			100% 46%,
+			100% 100%,
+			0% 100%
+		);
+	}
+}
+
+
+/*STYLE CARGA MASIVA*/
+
+.cuadro1cargainfo {
+    background: #48484b69;
+    border-radius: 10px;
+    width: 37%;
+    height: 70vh;
+
+}
+.cuadrorespuestainfo {
+    background: #48484b69;
+    border-radius: 10px;
+    width: 37%;
+    height: 70vh;
+}
+
+.cuadro_seleccion{
+    display: flex;
+    gap: 15px;
+    width: 150px;
+    height: 30px;
+    padding: 5px;
+    border-radius: 8px;
+    background: #4b4b4b;
+    justify-content: center;
+    align-items: center;
+}
+
+/*btn procesar*/
+
+.button {
+  cursor: pointer;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 400;
+  color: #ecf0ef;
+  background-color: transparent;
+  padding: 0.75em 1.25em;
+  border: 2px solid #ccd2e6;
+  border-radius: 1.25rem;
+}
+
+.glow {
+  --glow-line-color: #fff;
+  --glow-line-thickness: 2px;
+  --glow-line-length: 20;
+  --glow-blur-color: #fff;
+  --glow-blur-size: 10px;
+  --animation-speed: 1200ms;
+  --container-offset: 100px;
+  position: relative;
+}
+.glow-container {
+  pointer-events: none;
+  position: absolute;
+  inset: calc(var(--container-offset) / -2);
+  width: calc(100% + var(--container-offset));
+  height: calc(100% + var(--container-offset));
+  opacity: 0;
+}
+.glow-blur, .glow-line {
+  width: calc(100% - var(--container-offset));
+  height: calc(100% - var(--container-offset));
+  x: calc(var(--container-offset) / 2);
+  y: calc(var(--container-offset) / 2);
+  rx: 1.25rem;
+  fill: transparent;
+  stroke: black;
+  stroke-width: 5px;
+  stroke-dasharray: var(--glow-line-length) calc(50 - var(--glow-line-length));
+}
+.glow-line {
+  stroke: var(--glow-line-color);
+  stroke-width: var(--glow-line-thickness);
+}
+.glow-blur {
+  filter: blur(var(--glow-blur-size));
+  stroke: var(--glow-blur-color);
+  stroke-width: var(--glow-blur-size);
+}
+.glow:is(:hover, :focus) .glow-blur, .glow:is(:hover, :focus) .glow-line {
+  stroke-dashoffset: -80px;
+  transition: stroke-dashoffset var(--animation-speed) ease-in, stroke-dasharray var(--animation-speed) ease-in;
+}
+.glow:is(:hover, :focus) .glow-container {
+  animation: glow-visibility var(--animation-speed) ease-in;
+}
+
+@keyframes glow-visibility {
+  0%, 100% {
+    opacity: 0;
+  }
+  25%, 75% {
+    opacity: 1;
+  }
+}
+
+.procesandoinformaicon {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    margin-top: 25%;
+    margin-left: 0%;
+    display: none;
+    background: #50505073;
+    border-radius: 10px;
+}
+
+.loader {
+    position: absolute;
+    top: calc(28% - 69px);
+    left: calc(50% - 32px);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    perspective: 800px;
+}
+
+.inner {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;  
+}
+
+.inner.one {
+  left: 0%;
+  top: 0%;
+  animation: rotate-one 1s linear infinite;
+  border-bottom: 3px solid #EFEFFA;
+}
+
+.inner.two {
+  right: 0%;
+  top: 0%;
+  animation: rotate-two 1s linear infinite;
+  border-right: 3px solid #EFEFFA;
+}
+
+.inner.three {
+  right: 0%;
+  bottom: 0%;
+  animation: rotate-three 1s linear infinite;
+  border-top: 3px solid #EFEFFA;
+}
+
+@keyframes rotate-one {
+  0% {
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+  }
+}
+
+@keyframes rotate-two {
+  0% {
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+  }
+}
+
+@keyframes rotate-three {
+  0% {
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
+}

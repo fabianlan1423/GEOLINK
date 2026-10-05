@@ -15,9 +15,15 @@
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <title>GEOLIK CONSULTA</title>
 </head>
-<body class="bod1">
+<body class="bod" style="min-height: 100vh;
+            background-image: url('{{ asset('img/fondo_azul1.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;">
+
     
     <input type="hidden" name="usuarioactual" id="usuarioactual">
+    
     <div class='cuadrogeneral'>
         <div id="enejecucion" class="cuadrocargapuntocaliente">
             <div class="spinner-grow" role="status" style="width: 150px; height: 150px;">
@@ -65,110 +71,133 @@
             
         </div>
        
-
+        
         <div id="cuadropincipalinfo" class="transicion cuadroprincipal">
-            <div style="width:100%; margin-left: 35px; display:flex;">
-               
-                <div style="width:100%; "><!--cuadro mapa-->
+            <div>
+                <h3 style="color: white; font-weight: 600; font-family: math; margin-left: 5%; margin-top: 15px;">
+                    CONSULTA MASIVA - GEOLINK
+                </h3>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: center;"><!--cuadro pincipal-->
+                <div class="procesandoinformaicon" id="letraagua"><!--CUADRO DE CAGA DE PROCESO-->
                     
-                    <div class="cuadro_mapas" id="map" style="height: 80vh !important;">
-                        <div style="height: 5vh">
-                            <h3 class="titulomasivo">
-                                CONSULTA MASIVA DE DISPONIBILIDAD - GEOLINK
-                            </h3>
+                    <section>
+                        <div class="content">
+                            <h2 style="font-family: system-ui;">GEOLINK</h2>
+                            <h2 style="font-family: system-ui;">GEOLINK</h2>
                         </div>
-                        <hr class="lineadivision">
-                        <div style="width: 100%; display: flex; gap: 25px; height: 60vh;">
-                            <div style="width: 30%; border-right: solid 2px; border-radius: 15px; border-color: #6ec7ec; align-content: center; text-align-last: center;">
-                                <div style="height: 10%;">
-                                    <h5 class="subtitulomasivo">SELECCIONE PROCESOS A CORRER</h5>
-                                </div>
-                                <div style="margin-bottom: 5px; height: 40%; width: 100%; align-content: center; justify-self: center; padding-left: 10%;">
-                                    <div style="display: flex; gap: 15px;">
-                                        <div>
-                                            <input type="number" id="cantza" value="2" class="cuadrocant">
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="ZA" checked>
-                                            <label class="form-check-label" for="ZA">ZA</label>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 15px; margin-top: 5px;">
-                                        <div>
-                                            <input type="number" id="cantzc" value="1" class="cuadrocant">
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="ZC" checked>
-                                            <label class="form-check-label" for="ZC">ZC</label>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 15px; margin-top: 5px;">
-                                        <div>
-                                            <input type="number" id="cantnodo" value="2" class="cuadrocant">
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="NODO" checked>
-                                            <label class="form-check-label" for="NODO">NODO</label>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 15px; margin-top: 5px;">
-                                        <div>
-                                            <input type="number" id="cantfenix" value="2" class="cuadrocant">
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="FENIX">
-                                            <label class="form-check-label" for="FENIX">FENIX</label>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div style="display: flex; gap: 15px; width: 100%; height: 30%; align-items: center; padding: 8px;">
-                                    <div style="width: 20%;">
-                                        <div class="cargaarchivocirculo">
-                                            <div class="cargaarchivocirculo1">
-                                                <img src="\img\CARGA_ARCHIVO.png" alt="CARGAARCHIVO" id="btncargaarchivo" style="width: 40PX;">
-                                                <input type="file" name="cargaarchivo" id="cargaarchivo" style="display: none;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div style="align-content: center; width: 80%;">
-                                        <p style="color: white;" id="nombrearchivo">Nombre Archivo</p>
-                                    </div>
-                                </div>
-                                <div style="height: 20%;">
-                                    <button type="submit" class="btndecarga" id="procesarinfo">Procesar</button>
-                                </div>
-                            </div>
-                            <div style="width: 60%; "> <!--Recuadro informativo-->
-                                <div>
-                                    <div style="display: flex;">
-                                        <div style="width: 80%;">
-                                            <h3 class="subtitulomasivo">Estado De Proceso</h3>
-                                        </div>
-                                        <div style="width: 20%;">
-                                            <img id="descargaexcel" src="{{ asset('img/Descarga_exel.png')}}" alt="geolinkimg" style="width: 45px; margin-top: -20px; display: none;">
-                                        </div>
-                                    </div>  
-                                    
-                                    <hr class="lineadivision" style="margin-top: -5px;">
-                                </div>
-                                <div>
-                                    <p id="estadocarguemasivo" class="txtoinformativo">Selecciona Documento Para Consulta Masiva</p>
-                                </div>
-                            </div>
-                        </div>
+                    </section>
+                    <div class="loader">
+                        <div class="inner one"></div>
+                        <div class="inner two"></div>
+                        <div class="inner three"></div>
+                    </div>
 
+                </div>
+                <div class="cuadro1cargainfo"><!--cuadro de carga informacion-->
+                    <div><!--TITULO-->
+                        <div>
+                            <h3 style="color: white; font-weight: 600; font-family: math; margin-left: 10%;">Tipos De Proceso</h3>
+                        </div>
+                        <hr class="lineadivision" style="margin-top: -5px;">
+                        <div style=" display: flex; gap: 5px; margin-bottom: 5px; height: 40%; width: 100%; align-content: center; justify-self: center; padding-left: 2%; margin-top: 30px;">
+                            <div class="cuadro_seleccion">
+                                <div>
+                                    <input type="number" id="cantza" value="2" class="cuadrocant">
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="ZA" checked>
+                                    <label class="form-check-label" for="ZA">ZA</label>
+                                </div>
+                            </div>
+                            <div class="cuadro_seleccion">
+                                <div>
+                                    <input type="number" id="cantzc" value="1" class="cuadrocant">
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="ZC" checked>
+                                    <label class="form-check-label" for="ZC">ZC</label>
+                                </div>
+                            </div>
+                            <div class="cuadro_seleccion">
+                                <div>
+                                    <input type="number" id="cantnodo" value="2" class="cuadrocant">
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="NODO" checked>
+                                    <label class="form-check-label" for="NODO">NODO</label>
+                                </div>
+                            </div>
+                            <div class="cuadro_seleccion">
+                                <div>
+                                    <input type="number" id="cantfenix" value="2" class="cuadrocant">
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="FENIX">
+                                    <label class="form-check-label" for="FENIX">FENIX</label>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 35px; margin-left: 35px;"><!--CUADRO DE CARGA DE DATOS-->
+                        <div style="width: 100%;">
+                            <div style="display: flex; gap: 5px;">
+                                <div class="cargaarchivocirculo">
+                                    <div class="cargaarchivocirculo1">
+                                        <img src="\img\CARGA_ARCHIVO.png" alt="CARGAARCHIVO" id="btncargaarchivo" style="width: 40PX;">
+                                        <input type="file" name="cargaarchivo" id="cargaarchivo" style="display: none;">
+                                    </div>
+                                </div>
+                                <div style="width: 50%; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+                                    <p style="color: white; margin: 0;" id="nombrearchivo">Nombre Archivo</p>
+                                </div>
+                            </div>
+                            <div style="width: 100%; height: 20%; justify-self: center; margin-top: 45px; text-align-last: center;">
+                                <button type="submit" id="procesarinfo"  class="button glow">
+                                    Procesar
+                                    <svg class="glow-container">
+                                        <rect pathLength="100" stroke-linecap="round" class="glow-blur"></rect>
+                                        <rect pathLength="100" stroke-linecap="round" class="glow-line"></rect>
+                                    </svg>
+                                </button>
+                                
+                            </div>
+
+                        </div>
+                        
+                      
+                    </div>
+
+                </div>
+                <div class="cuadrorespuestainfo"><!--cuadro para respuesta de informacion-->
+                    <div>
+                        <div style="display: flex;">
+                            <div style="width: 80%;">
+                                <h3  style="color: white; font-weight: 600; font-family: math; margin-left: 10%;">Estado De Proceso</h3>
+                            </div>
+                            
+                        </div>  
+                        
+                        <hr class="lineadivision" style="margin-top: -5px;">
+                    </div>
+                    <div style="margin-left: 25px; display: flex; gap: 5px;">
+                        <div style="width:80%;" >
+                            <p id="estadocarguemasivo" class="txtoinformativo">Selecciona Documento Para Consulta Masiva</p>
+                        </div>
+                        <div style="width: 20%;">
+                            <img id="descargaexcel" src="{{ asset('img/descarga_excel_masivo.png')}}" alt="geolinkimg" style="width: 45px; margin-top: -20px; display: none; cursor: pointer;">
+                        </div>
+                        
                     </div>
                 </div>
+
             </div>
-            <div id="cuadroaviso" class="cuadroaviso">
-                
-            </div>
+
+           
             
-            <br>
-            <hr class="linea">
             
             
         </div>

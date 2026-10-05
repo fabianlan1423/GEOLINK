@@ -13,6 +13,12 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
     <title>GEOLINK CONSULTA</title>
 </head>
 <body class="bod1">
@@ -57,7 +63,7 @@
             </div>
             
         </div>
-        <div  id="cuadropincipalinfo" class="transicion cuadroprincipal" style="justify-items: center; display: flex; gap: 5px;"><!--CUADRO PRINCIPAL V2 GEOLINK-->
+        <div  id="cuadropincipalinfo" class="transicion cuadroprincipal" style="justify-items: center; display: flex; gap: 5px; height: 90vh !important;"><!--CUADRO PRINCIPAL V2 GEOLINK-->
             <div style="height: 85vh; display: flex; gap: 3px;">
                 <div class="pestaniaaccesorapido"><!--Pestaña para acceso rapido-->
                     <div class="botonselectmaps">
@@ -81,12 +87,17 @@
                         </span>
                     </div>
                 </div>
-                <div class="cuadrobusqueda"><!--fron de consulta-->
+                <div>
+                    <div id="btnaparece" class="botonaparecer">
+                        <img src="http://127.0.0.1:8000/img/retroceder.png" id="aparecer" alt="retroceder" style="rotate: 180deg; height: 20px; cursor: pointer; ">
+                    </div>
+                </div>
+                <div id="cuadrodebusqueda" class="cuadrobusqueda"><!--fron de consulta-->
                     <div style="height: 8%; display: flex; background: rgb(67 67 73 / 34%); padding: 5px 0px 3px 0px; border-radius: 8px;"><!--Principal-->
-                        <div><!--TITULO-->
+                        <div style=" width: 40%;"><!--TITULO-->
                             <h5 id="titulobusqueda" style="color: white; margin-left: 10px; width: 40%;">Coordenada</h5>
                         </div>
-                        <div><!--RED-->
+                        <div style=" width: 40%;"><!--RED-->
                             <div style="width: auto; height: 30px; align-self: flex-end; margin-left: 10px; display: flex; gap: 5px; width: 60%;">
                                 <div style="display: flex; gap: 10px; align-items: baseline;">
                                     <p style="color: white;">COLTEL</p>
@@ -96,27 +107,51 @@
                                     <p style="color: white;">TIGO</p>
                                     <input type="checkbox" id="tigo" name="tigo" checked >
                                 </div>
-                                <div style="display: flex; gap: 10px; align-items: baseline;">
-                                    <img src="{{ asset('img/retroceder.png')}}" alt="retroceder" style="margin-left: 20px; cursor: pointer; margin-top: 5px;">
-                                </div>
+                                
                             </div>
                         </div>
-                        <div>
-
+                        <div style=" width: 20%; justify-items: right; padding-right: 10px;">
+                            <div style="display: flex; gap: 10px; align-items: baseline;">
+                                <img src="{{ asset('img/retroceder.png')}}" id="esconder" alt="retroceder" style="height: 20px; margin-left: 20px; cursor: pointer; margin-top: 5px;">
+                            </div>
                         </div>
                     </div>
-                    <div><!--QUE ESTA CONSULTANDO-->
-                        <div id="panel" style="display: flex; gap: 5px; color: white; padding: 0px; height: 10px; margin-bottom: -10px;">
+                    <div style="height: 3%;"><!--QUE ESTA CONSULTANDO-->
+                        <div id="panel" style="display: flex; gap: 5px; color: white; height: 100%; padding: 0px; margin-bottom: -10px;">
                             
                         </div>  
                     </div>
-                    <div id="cuadrodecoordenadas" class="recuadrosmaps" style="max-height: 15% !important; margin-top: 2px !important;">
+                    <div id="cuadrodecoordenadas" class="recuadrosmaps" style="height: 18% !important; margin-top: 2px !important;">
                         <div class="form-floating mb-3 campo-pequeno" style="width:90%;">
                             <input type="text" class="form-control" id="datocoordenada" placeholder="datocoordenada" style="font-size: 12px;">
                             <label for="datocoordenada">Coordenadas</label>
                         </div>
+                        <div style="width: 95%;"><!--filtro-->
+                        <div style="display: flex; gap: 2px; width: 95%;">
+                            
+                            <div style="width: 16%;  background: #129c7063;  cursor: pointer; height: 20px; text-align: center; font-size: 11px; border: solid 1px #ffffff66;">
+                                <p>GENERAL</p>
+                            </div>
+                            <div style="width: 16%;  background: #129c7063;   cursor: pointer; height: 20px; text-align: center; font-size: 12px; border: solid 1px #ffffff66;">
+                                <p>ZC</p>
+                            </div>
+                            <div style="width: 16%;  background: #0a0aa163;   cursor: pointer; height: 20px; text-align: center; font-size: 12px; border: solid 1px #ffffff66;">
+                                <p>ZA</p>
+                            </div>
+                            <div style="width: 16%;  background: #a19e0a63;   cursor: pointer; height: 20px; text-align: center; font-size: 12px; border: solid 1px #ffffff66;">
+                                <p>EMP</p>
+                            </div>
+                            <div style="width: 16%;  background: #165772a8;   cursor: pointer; height: 20px; text-align: center; font-size: 12px; border: solid 1px #ffffff66;">
+                                <p>TIGO</p>
+                            </div>
+                            <div style="width: 16%;  background: #a10a1063;   cursor: pointer; height: 20px; text-align: center; font-size: 12px; border: solid 1px #ffffff66;">
+                                <p>NODO</p>
+                            </div>
+                            
+                        </div>
+                    </div>
                     </div> 
-                    <div class="recuadrosmaps" id="cuadrodireccion" style="display: none; max-height: auto !important; margin-top: 2px !important;" >
+                    <div class="recuadrosmaps" id="cuadrodireccion" style="display: none; height: 25% !important; margin-top: 2px !important;" >
                         <div class="form-floating mb-3 "  style="width: 90%;">
                             
                             <input type="text" class="form-control" id="direccion" placeholder="Direccion">
@@ -133,57 +168,14 @@
                             <label for="localidad">Localidad</label>
                         </div>
                     </div>
-                    <div class="recuadrosmaps" id="cudroexcel" style="display: none; max-height: 15% !important; margin-top: 2px !important;" >
-                          <!--SELECCION DE COLUMNAS A EXPORTAR EN INFORME DE EXCEL-->
+                    <div class="recuadrosmaps" id="cudroexcel" style="display: none; height: 15% !important; margin-top: 2px !important;" >
+                        
                           
                     </div>
-                     <div class="recuadrosmaps" id="cuadrorespuesta" style="text-align: -webkit-center; width: 100%; height: auto; max-height: 73% !important; margin-top: 2px !important;" ><!--CUADRO DE RESPUESTA AL USUARIO-->
-                        <div style="width: 95%;">
-                            <div class="lin1respu">
-                                <div style="width: 20%; padding-left: 8px; background: #0a0aa163; border-radius: 8px 0px 0px 0px;">
-                                    <p>ZA</p>
-                                </div>
-                                <div style="width: 40%; text-align: center;">
-                                    <p>Mendio: FFTH</p>
-                                </div>
-                                <div style="width: 40%; text-align: center;">
-                                    <p>Dist: 40.62 mtr</p>
-                                </div>
-                            </div>
-                            <div class="lin2respu"><!--linea 1-->
-                                <div style="width: 5%; text-align: center;">
-                                    <input type="checkbox" value="" onchange="ruta(this)">
-                                </div>
-                                
-                                <div style="width: 20%; text-align: center;">
-                                    <p title="ID">ID: 990201</p>
-                                </div>
-                                <div style="width: 60%; text-align: center;">
-                                    <p title="DESTINO">Dest: CGDOS-CT4/5-83-02</p>
-                                </div>
-                                
-                                <div style="width: 10%; text-align: center;">
-                                    <p title="PUERTOS DISPONIBLES">PD: 6</p>
-                                </div>
-                            </div>
-                            <div class="lin3respu"><!--linea 2-->
-                                <div>
-                                    <p title="DIRECCION">CL 63 s KR 81 11 |</p>
-                                </div>
-                                <div>
-                                    <p title="RED" >ONNET |</p>
-                                </div>
-                            </div>
-                            <div class="lin4respu"><!--linea 2-->
-                                <div>
-                                    <p title="olt">OH_BOGALGDOC_I_7360_CentrodeGravedad2_3 | </p>
-                                </div>
-                                <div>
-                                    <P title="NODO">|</P>
-                                </div>
-                            </div>
+                        <div class="cuadroelementosrespuesta" id="cuadrorespuesta" ><!--CUADRO DE RESPUESTA AL USUARIO-->
+                            
+                        
                         </div>
-                    </div>
                     
 
 
@@ -215,33 +207,51 @@
         
 
         <div id="cuadrotabladirecciones" class="cuadro_direcciones">
-            <br>
-            <div style="text-align: end; padding-right: 31px;">
-                <button id="cierre" type="button" class="btn-close" aria-label="Close"></button>
+            <div class="bordesuperior">
+                <div class="outer">
+                    <div  id="cierre" class="inner">
+                        <label class="labelcierre">Cerrar</label>
+                    </div>
+                </div>
+                <!-- <button  type="button" class="btn-close" aria-label="Close"></button> -->
             </div>
             
-            <div>
-                <h2 style="margin-top: 25px; color: white;">DIRECCIONES ASOCIADAS A CTO</h2>
+            <div style="margin-top: 35px; text-align: center;">
+                <h4 class="titulo">Direcciones Asociadas  a CTO</h4>
             </div>
             <div style="height: 50%;">
                 <div class="miDiv">
-                    <table id="datospordireccion" style="margin-top: 15px;">
-                        <thead>
-                            <tr>
-                                <th>CTO</th>
-                                <th>LOCALIDAD</th>
-                                <th>DIRECCION CLI</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div style="margin-top: 15px;">
+
+                        <div style="margin-bottom: 10px;">
+                            <input 
+                                type="text" 
+                                id="filtroDireccionCli" 
+                                placeholder="Filtrar por dirección..."
+                                class="form-control"
+                                style="display: none;"
+                            >
+                        </div>
+
+                        <table id="datospordireccion" class="display" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>CTO</th>
+                                    <th>LOCALIDAD</th>
+                                    <th>DIRECCION CLI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <div>
+        <div style="display: none;">
             <div style="width:100%; margin-left: 35px;">
                 <div><!--CUADRO PRINCIPAL-->
                     <div><!--cuadro de busqueda-->
@@ -249,7 +259,7 @@
                     </div>
                     
                 </div>
-                <div><!--cuadro consultas-->
+                <!-- <div>
                     <div class="cuadro_consultas">
                         <div style="display: none; gap: 10px;">
                             <div class="cuadroseleccion">
@@ -267,25 +277,25 @@
                             
                         </div>
                        
-                        <div id="busquedadireccion" class="recuadros" style="width: 40%; gap: 5px; margin-top: -15px !important; " ><!--CUADRO DE DIRECCION-->
+                        <div id="busquedadireccion" class="recuadros" style="width: 40%; gap: 5px; margin-top: -15px !important; " >
                             
                             
                         </div>
                         <div style="width: 1px; border: solid 2px; border-color: white;"></div>
-                        <div id="busquedacoordenada" style="display: flex; width: 30%; gap: 5px; justify-content: center;" class="recuadros"><!--CUADRO DE DIRECCION-->
+                        <div id="busquedacoordenada" style="display: flex; width: 30%; gap: 5px; justify-content: center;" class="recuadros">
                             
                             
                         </div>
                         <br>
-                        <div style="width: 100%; text-align: center; width: 10%; align-content: center; margin-top: 20px;"><!--CUADRO DE DIRECCION-->
+                        <div style="width: 100%; text-align: center; width: 10%; align-content: center; margin-top: 20px;">
                             <input class="btn_ingreso" type="button" id="consultacoordenadas" value="CONSULTAR">
                         </div>
                         
                     </div>
-                    <div><!--Consulta Cordenedas-->
+                    <div>
                         
                     </div>
-                </div>
+                </div> -->
                 
             </div>
             <div id="cuadroaviso" class="cuadroaviso">
@@ -431,14 +441,40 @@
 <script>
 
 
-// iconoexportexcel iconodedireccion iconocoordenada
+function exportarExcel() {
 
-// $("img").each(function  () {
+    hoja = '';
+    
+    
+    
+    // Obtener la tabla
+    var tabla = document.getElementById('tbrespuesta');
 
-//     $ttttt   
-     
- 
-// });
+    // Convertir la tabla a una hoja de Excel
+    var hoja = XLSX.utils.table_to_sheet(tabla);
+
+    // Crear un libro de Excel
+    var libro = XLSX.utils.book_new();
+
+    // Agregar la hoja al libro
+    XLSX.utils.book_append_sheet(libro, hoja, 'Geolink Respuesta');
+
+    // Descargar archivo
+    XLSX.writeFile(libro, 'Consulta Geolink.xlsx');
+}
+
+   
+  
+
+    $('#btnaparece').click(function() {
+        const cuadrobusqueda = $('#cuadrobusqueda');
+        const btnaparece = $('#btnaparece');
+        console.log($(this).attr('id'));       // ID
+        console.log($(this).attr('class'));    // Clase
+        console.log($(this).text());           // Texto
+    });
+
+
 consultacolum();
 
 function consultacolum(){
@@ -450,8 +486,21 @@ function consultacolum(){
              _token:$('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+
+            // for (let i = 0; i < response.data.length; i++) {
+
+            //     $('#cudroexcel').append(`
+            //         <div>
+            //             <div>
+            //                 <input type="checkbox" value="${response.data[i]}" checked>
+            //                 <label>${response.data[i]}</label>
+            //             </div>
+            //         </div>
+            //     `);
+
+            // }
             console.log(response.data);
-            alert(JSON.stringify(response.data, null, 2));
+            // alert(JSON.stringify(response.data, null, 2));
         },
         error: function (xhr, error) { 
 
@@ -464,27 +513,65 @@ $("img").each(function () {
 
     $(this).click(function (){
 
+        
+
         let id = $(this).attr('id');
         const cuadrodecoordenadas = $('#cuadrodecoordenadas') 
         const cuadrodireccion = $('#cuadrodireccion') 
         const cudroexcel = $('#cudroexcel') 
+        const cuadrodebusqueda = $('#cuadrodebusqueda') 
+        const btnaparece = $('#btnaparece') 
+        const aparecer = $('#aparecer') 
+        const esconder = $('#esconder') 
+        const datocoordenada = $('#datocoordenada') 
+
+
+        
 
         if(id == 'iconocoordenada'){
             cuadrodecoordenadas.css('display','block')
             cuadrodireccion.css('display','none')
             cudroexcel.css('display','none')
+            $('#cuadrorespuesta').empty();
+            $('#tbrespuesta tbody').empty();
            
         }
         if (id == 'iconodedireccion') {
             cuadrodecoordenadas.css('display','none')
             cuadrodireccion.css('display','block')
             cudroexcel.css('display','none')
+            $('#cuadrorespuesta').empty();
+            $('#tbrespuesta tbody').empty();
+            datocoordenada.val('')
         }
         if (id == 'iconoexportexcel') {
-            cuadrodecoordenadas.css('display','none')
-            cuadrodireccion.css('display','none')
-            cudroexcel.css('display','block')
+            // cuadrodecoordenadas.css('display','none')
+            // cuadrodireccion.css('display','none')
+            // cudroexcel.css('display','block')
+            exportarExcel()
+
+            
         }
+
+        if(id == 'aparecer'){
+            cuadrodebusqueda.css('opacity',1);
+            btnaparece.css('opacity',0);
+            btnaparece.css('translate','308px');
+            btnaparece.css('rotate','180deg');
+            btnaparece.css('z-index','0');
+
+        }
+       
+        if(id == 'esconder'){
+            cuadrodebusqueda.css('opacity',0);
+            btnaparece.css('opacity',1);
+            btnaparece.css('translate','0px');
+            btnaparece.css('rotate','0deg');
+            btnaparece.css('rotate','0deg');
+            btnaparece.css('z-index','100000');
+
+        }
+       
 
     })
 
@@ -497,6 +584,8 @@ $("p").each(function () {
      $(this).click(function () {
             let menubusqueda = $(this).text();
 
+          
+
             if(menubusqueda == 'Direccion'){
                 $('#cuadrodedireccion').css('display','block')
                 $('#cuadrodecoordenadas').css('display','none')
@@ -504,6 +593,31 @@ $("p").each(function () {
             if(menubusqueda == 'Coordenadas'){
                 $('#cuadrodecoordenadas').css('display','block')
                 $('#cuadrodedireccion').css('display','none')
+            }
+
+            if (menubusqueda == 'ZA') {
+                $('[id*="nodo"], [id*="emp"], [id*="zc"], [id*="tigo"]').css('display', 'none');
+                $('[id*="za"]').css('display', 'block');       
+            }
+            if (menubusqueda == 'ZC') {
+                $('[id*="nodo"], [id*="emp"], [id*="za"], [id*="tigo"]').css('display', 'none');
+                $('[id*="zc"]').css('display', 'block');       
+            }
+            if (menubusqueda == 'EMP') {
+                $('[id*="nodo"], [id*="za"], [id*="zc"], [id*="tigo"]').css('display', 'none');
+                $('[id*="emp"]').css('display', 'block');       
+            }
+            if (menubusqueda == 'NODO') {
+                $('[id*="za"], [id*="emp"], [id*="zc"], [id*="tigo"]').css('display', 'none');
+                $('[id*="nodo"]').css('display', 'block');       
+            }
+            if (menubusqueda == 'TIGO') {
+                $('[id*="nodo"], [id*="emp"], [id*="zc"], [id*="za"]').css('display', 'none');
+                $('[id*="tigo"]').css('display', 'block');       
+            }
+            if (menubusqueda == 'GENERAL') {
+                $('[id*="nodo"], [id*="emp"], [id*="zc"], [id*="tigo"],[id*="za"]').css('display', 'block');
+                 
             }
             
      
@@ -707,7 +821,6 @@ function limpiarRutas() {
             await zc();
             await za();
             if (fenix.is(':checked')) {
-                alert('zatigo')
                 await zatigo();
             }
             await emp();
@@ -770,8 +883,9 @@ function limpiarRutas() {
 
         const fenix = $('#tigo');
 
-        limpiezarespuesta();
-        limpiarRutas();
+        await limpiezarespuesta();
+        await limpiarRutas();
+        $('#cuadrorespuesta').empty();
         $('#tbrespuesta tbody').empty();
 
         try {
@@ -833,14 +947,16 @@ function limpiarRutas() {
             // ==========================================================
 
             if (direcc && !lat && !long) {
-
+                
                 await consultacoordenada();
-
+                
                 await creaciongeom();
-
+                
                 await direccion();
-
-                aplicarColumnas();
+                
+                await aplicarColumnas();
+                
+                 $('#localidad').prop('selectedIndex', 0);
 
                 return;
             }
@@ -857,24 +973,25 @@ function limpiarRutas() {
      $('#datocoordenada').on('keydown', function (e) {  
 
             if(e.key == 'Enter'){
-                alert('ENTER')
                 consulta()
             }
 
      });
 
-    $('#localidad').change(function (){
-            const direccion = $('#direccion').val()
-           
+    $('#localidad').on('change', function () {
 
-            if(direccion == ''){
-                alert('Ingrese una dirección antes de seleccionar la localidad para realizar la búsqueda.')
-                $('#localidad').prop('selectedIndex',0)
-                return
-            }else{
-                consulta()
-            }
+        const direccion = $('#direccion').val();
 
+        if (direccion == '') {
+            alert('Ingrese una dirección antes de seleccionar la localidad para realizar la búsqueda.');
+            $('#localidad').prop('selectedIndex', 0);
+            return;
+        }
+
+        consulta();
+
+        // Dejar nuevamente el select en "Seleccione..."
+       
     });
 
 
@@ -914,16 +1031,26 @@ function limpiarRutas() {
     }
     function consultacoordenada() {
 
-        const datocoordenada = $('#datocoordenada').val().trim();
+        const datocoordenada = ($('#datocoordenada').val() || '').trim();
         const coordenadas = datocoordenada.split(',');
         
-        const latitud =  coordenadas[0].trim().replace(',', '.');
-        const longitud =  coordenadas[1].trim().replace(',', '.');
+        let latitud = '';
+        let longitud = '';
+
+        if (datocoordenada !== '') {
+
+            const coordenadas = datocoordenada.split(',');
+
+            latitud = (coordenadas[0] || '').trim().replace(',', '.');
+            longitud = (coordenadas[1] || '').trim().replace(',', '.');
+        }
 
         const direccion = $('#direccion').val();
         const localidad = $('#localidad').val();
 
         const cuadroconsulta = $('#cuadroaviso');
+
+        const usuarioactual = $('#usuarioactual').val()
 
         cuadroconsulta
             .css('display', 'block')
@@ -933,7 +1060,6 @@ function limpiarRutas() {
             url: '/datosconsulta',
             type: 'POST',
             data: {
-                id_pre: '1',
                 latitud: latitud,
                 longitud: longitud,
                 direccion: direccion,
@@ -1029,14 +1155,65 @@ function limpiarRutas() {
             },
             success:function(response){
                 let html = '';
+                let i = 1;
 
                 response.data.forEach(function(item){
 
+                    $('#cuadrorespuesta').append(`
+                            <div id='direcc${i++}' style="width: 95%; margin-bottom: 5px;">
+                                <div class="lin1respu">
+                                    <div style="width: 35%; padding-left: 8px; background: #129c7063; border-radius: 8px 0px 0px 0px;">
+                                        <p>DIRECCION</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>DIRECCION</p>
+                                    </div>
+                                    <div style="width: 20%; text-align: center;">
+                                        <p>Dist: 0 mtr</p>
+                                    </div>
+                                    <div style="width: 15%; text-align: center;">
+                                        <p title="PUERTOS DISPONIBLES">PD: ${item.op1dipscto}</p>
+                                    </div>
+                                </div>
+                                <div class="lin2respu"><!--linea 1-->
+                                    <div style="width: 5%; text-align: center;">
+                                        <input type="checkbox" value="${item.coorde}" onchange="ruta(this)">
+                                    </div>
+                                    
+                                    <div style="width: 20%; text-align: left;">
+                                        <p title="ID">ID:${item.id_cto1} |</p>
+                                    </div>
+                                    <div style="width: 45%; text-align: center;">
+                                        <p title="DESTINO">Dest:${item.op1cto} |</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p title="RED" >${item.op1feeder}</p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="lin3respu"><!--linea 2-->
+                                    <div style="width: 45%; text-align: left; font-size: 11px;">
+                                        <p title="DIRECCION">${item.direccion_cli} |</p>
+                                    </div>
+                                    <div style="width: 45%; text-align: center; font-size: 11px;">
+                                        <p title="OLT">${item.op1olt.substring(0, 19)} | </p>
+                                    </div>
+                                    <div style="width: 10%; text-align: left; font-size: 11px;">
+                                        <P title="NODO">|</P>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                          
+                        `);
+
                     html += `
                         <tr>
-                            <td></td>
-                            <td>Direc Exacta<td>
-                            <td>${item.coordenadas}</td>
+                            <td>
+                                <input type="checkbox" value="${item.coorde}" onchange="ruta(this)"/>
+                            </td>
+                            <td>${item.medi}<td>
                             <td>${item.id_cto1}</td>
                             <td>${item.op1cto}</td>
                             <td>${item.direccion_cli}</td>
@@ -1044,7 +1221,8 @@ function limpiarRutas() {
                             <td>${item.op1feeder}</td>
                             <td>${item.op1dipscto}</td>
                             <td>${item.op1olt}</td>
-                            <td>${item.grupo_cto}</td>
+                            <td></td>
+                            <td></td>
                             
                         </tr>
                     `;
@@ -1105,6 +1283,7 @@ function limpiarRutas() {
 
                 $('#datospordireccion tbody').html(html);
                 aplicarColumnas();
+                filtro();
 
         }
         
@@ -1140,8 +1319,60 @@ function limpiarRutas() {
                 }
 
                 let html = '';
+                let i = 1;
 
                 response.data.forEach(function(item){
+
+                    $('#cuadrorespuesta').append(`
+                            <div id='zc${i++}' style="width: 95%; margin-bottom: 5px;">
+                                <div class="lin1respu">
+                                    <div style="width: 20%; padding-left: 8px; background: #129c7063; border-radius: 8px 0px 0px 0px;">
+                                        <p>ZC</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>FFTH</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>Dist:${item.op1distanciacto} mtr</p>
+                                    </div>
+                                    <div style="width: 20%; text-align: center;">
+                                        <p title="PUERTOS DISPONIBLES">PD: ${item.op1dipscto}</p>
+                                    </div>
+                                </div>
+                                <div class="lin2respu"><!--linea 1-->
+                                    <div style="width: 5%; text-align: center;">
+                                        <input type="checkbox" value="${item.coorde}" onchange="ruta(this)">
+                                    </div>
+                                    
+                                    <div style="width: 20%; text-align: left;">
+                                        <p title="ID">ID:${item.id_cto1} |</p>
+                                    </div>
+                                    <div style="width: 45%; text-align: center;">
+                                        <p title="DESTINO">Dest:<a href="#" onclick="dato('${item.op1cto}'); return false;">
+                                        ${item.op1cto}
+                                    </a>|</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p title="RED" >${item.op1feeder}</p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="lin3respu"><!--linea 2-->
+                                    <div style="width: 45%; text-align: left;">
+                                        <p title="DIRECCION">${item.direccion_cli} |</p>
+                                    </div>
+                                    <div style="width: 45%; text-align: center;">
+                                        <p title="OLT">${item.op1olt.substring(0, 19)} | </p>
+                                    </div>
+                                    <div style="width: 10%; text-align: left;">
+                                        <P title="NODO">|</P>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                          
+                        `);
 
                     html += `
                         <tr>
@@ -1200,8 +1431,57 @@ function limpiarRutas() {
                     
                 }
                     let html = '';
-
+                    let i = 1;
                     response.data.forEach(function(item){
+
+                        $('#cuadrorespuesta').append(`
+                            <div id='emp${i++}' style="width: 95%; margin-bottom: 5px;">
+                                <div class="lin1respu">
+                                    <div style="width: 20%; padding-left: 8px; background: #a19e0a63; border-radius: 8px 0px 0px 0px;">
+                                        <p>EMP</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>EMP</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>Dist:${item.distancia} mtr</p>
+                                    </div>
+                                    <div style="width: 20%; text-align: center;">
+                                        <p title="PUERTOS DISPONIBLES">PD: ${item.puertos}</p>
+                                    </div>
+                                </div>
+                                <div class="lin2respu"><!--linea 1-->
+                                    <div style="width: 5%; text-align: center;">
+                                        <input type="checkbox" value="${item.coorde}" onchange="ruta(this)">
+                                    </div>
+                                    
+                                    <div style="width: 20%; text-align: left;">
+                                        <p title="ID">ID:${item.idemp}  |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="DESTINO">Dest:${item.empalme} | </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="RED" >${item.feeder} |  </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="lin3respu"><!--linea 2-->
+                                    <div style="width: auto; text-align: left;">
+                                        <p title="DIRECCION">N/A |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="OLT">N/A |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: left;">
+                                        <P title="NODO">N/A | </P>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                          
+                        `);
 
                         html += `
                             <tr>
@@ -1258,12 +1538,61 @@ function limpiarRutas() {
                     console.error("ZA: respuesta inválida", response);
                     
                 }
+                    
                     let html = '';
+                    let i =1;
 
                     response.data.forEach(function(item){
 
                         $('#cuadrorespuesta').append(`
-                            <input type="text" id="${item.direccion_cli}" value="${item.direccion_cli}">
+                            <div id='za${i++}' style="width: 95%; margin-bottom: 5px;">
+                                <div class="lin1respu">
+                                    <div style="width: 20%; padding-left: 8px; background: #0a0aa163; border-radius: 8px 0px 0px 0px;">
+                                        <p>ZA</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>FFTH</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>Dist:${item.op1distanciacto} mtr</p>
+                                    </div>
+                                    <div style="width: 20%; text-align: center;">
+                                        <p title="PUERTOS DISPONIBLES">PD: ${item.op1dipscto}</p>
+                                    </div>
+                                </div>
+                                <div class="lin2respu"><!--linea 1-->
+                                    <div style="width: 5%; text-align: center;">
+                                        <input type="checkbox" value="${item.coorde}" onchange="ruta(this)">
+                                    </div>
+                                    
+                                    <div style="width: 20%; text-align: left;">
+                                        <p title="ID">ID:${item.id_cto1}  |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="DESTINO">Dest:<a href="#" onclick="dato('${item.op1cto}'); return false;">
+                                        ${item.op1cto} |  
+                                    </a>|</p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="RED" >${item.op1feeder} |  </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="lin3respu"><!--linea 2-->
+                                    <div style="width: auto; text-align: left;">
+                                        <p title="DIRECCION">${item.direccion_cli} |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="OLT"> ${item.op1olt.substring(0, 19)} |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: left;">
+                                        <P title="NODO"> | </P>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                          
                         `);
 
                         html += `
@@ -1336,8 +1665,58 @@ function limpiarRutas() {
                     
                 }
                     let html = '';
+                    let i = 1;
 
                     response.data.forEach(function(item){
+                        
+                         $('#cuadrorespuesta').append(`
+                            <div id='nodo${i++}' style="width: 95%; margin-bottom: 5px;">
+                                <div class="lin1respu">
+                                    <div style="width: 20%; padding-left: 8px; background: #a10a1063; border-radius: 8px 0px 0px 0px;">
+                                        <p>NODO</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>NODO</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>Dist:${item.distancianodo} mtr</p>
+                                    </div>
+                                    <div style="width: 20%; text-align: center;">
+                                        <p title="PUERTOS DISPONIBLES">PD: N/A</p>
+                                    </div>
+                                </div>
+                                <div class="lin2respu"><!--linea 1-->
+                                    <div style="width: 5%; text-align: center;">
+                                        <input type="checkbox" value="${item.coorde}" onchange="ruta(this)">
+                                    </div>
+                                    
+                                    <div style="width: 20%; text-align: left;">
+                                        <p title="ID">ID:${item.ip}  |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="DESTINO">Dest:${item.modelo} | </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="RED" >${item.marca} |  </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="lin3respu"><!--linea 2-->
+                                    <div style="width: auto; text-align: left;">
+                                        <p title="DIRECCION">N/A |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="EQUIPO">${item.nombre_equipo} |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: left;">
+                                        <P title="NODO">${item.anillo} | </P>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                          
+                        `);
 
                         html += `
                             <tr>
@@ -1400,8 +1779,58 @@ function limpiarRutas() {
                     
                 }
                     let html = '';
+                    let i =1;
 
                     response.data.forEach(function(item){
+
+                        $('#cuadrorespuesta').append(`
+                            <div id='tigo${i++}' style="width: 95%; margin-bottom: 5px;">
+                                <div class="lin1respu">
+                                    <div style="width: 20%; padding-left: 8px; background: #165772a8; border-radius: 8px 0px 0px 0px;">
+                                        <p>TIGO</p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>FTTH </p>
+                                    </div>
+                                    <div style="width: 30%; text-align: center;">
+                                        <p>Dist:${item.op1distanciacto} mtr</p>
+                                    </div>
+                                    <div style="width: 20%; text-align: center;">
+                                        <p title="PUERTOS DISPONIBLES">PD: ${item.estado_hilo}</p>
+                                    </div>
+                                </div>
+                                <div class="lin2respu"><!--linea 1-->
+                                    <div style="width: 5%; text-align: center;">
+                                        <input type="checkbox" value="${item.coorde}" onchange="ruta(this)">
+                                    </div>
+                                    
+                                    <div style="width: 20%; text-align: left;">
+                                        <p title="ID">ID:${item.olt}  |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="DESTINO">Dest:${item.armario} | </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="RED" >N/A |  </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="lin3respu"><!--linea 2-->
+                                    <div style="width: auto; text-align: left;">
+                                        <p title="DIRECCION">${item.direccion_punto} |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: center;">
+                                        <p title="EQUIPO">${item.olt} |  </p>
+                                    </div>
+                                    <div style="width: auto; text-align: left;">
+                                        <P title="CENTRAL">${item.central} | </P>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                          
+                        `);
 
                         html += `
                             <tr>
@@ -1449,6 +1878,7 @@ function limpiarRutas() {
         function ruta(checkbox){
 
             const id = $(checkbox).val();
+            
 
             // ==========================
             // ELIMINAR RUTA
@@ -1473,11 +1903,29 @@ function limpiarRutas() {
             // ==========================
             // COORDENADAS CLIENTE
             // ==========================
-            const datocoordenada = $('#datocoordenada').val().trim();
-            const coordenadas = datocoordenada.split(',');
-            
-            const latitud =  parseFloat(coordenadas[0].trim().replace(',', '.'));
-            const longitud =  parseFloat(coordenadas[1].trim().replace(',', '.'));
+             const datocoordenada = ($('#datocoordenada').val() || '').trim();
+
+                let latitud = '';
+                let longitud = '';
+
+                // Si datocoordenada tiene valor
+                if (datocoordenada !== '') {
+
+                    const coordenadas = datocoordenada.split(',');
+
+                    latitud = (coordenadas[0] || '').trim().replace(',', '.');
+                    longitud = (coordenadas[1] || '').trim().replace(',', '.');
+
+                } else {
+
+                    // Si está vacío, tomar coordenadas del checkbox marcado
+                    const checkbox = $('input[type="checkbox"]:checked');
+
+                    if (checkbox.length > 0) {
+                        latitud = checkbox.data('latitud');
+                        longitud = checkbox.data('longitud');
+                    }
+                }
 
             
             // ==========================
@@ -1713,6 +2161,36 @@ function limpiarRutas() {
             });
 
         }
+
+
+        function filtro() {
+
+            var tablaDireccion = $('#datospordireccion').DataTable({
+                pageLength: 10,
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "Pag 0 a 0 de 0 registros",
+                    zeroRecords: "No se encontraron registros",
+                    paginate: {
+                        first: "Pag 1",
+                        last: "Último",
+                        next: "Sig",
+                        previous: "Ant"
+                    }
+                }
+            });
+
+            // Filtro específico para DIRECCION CLI
+            $('#filtroDireccionCli').on('keyup', function () {
+                tablaDireccion
+                    .column(2) // columna DIRECCION CLI
+                    .search(this.value)
+                    .draw();
+            });
+
+        };
 </script>
 
 <script>

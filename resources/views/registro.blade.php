@@ -9,17 +9,19 @@
     @vite('resources/js/jsregistrogeolink.js')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <title>GEOLINK REGISTRO</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
 </head>
 <body class="bod" style="min-height: 100vh;
             background-image: url('{{ asset('img/fondo.png') }}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
 
     
 
-    <div style="display: flex; justify-content: center; margin-top: 10%;">
+    <div style="display: flex; justify-content: center; margin-top: 3%; width: 230vh;">
         <div class="cuadroregistro" id="cuadroderegistro">
             <div class="cuadro50porcen"><!--INGRESO-->
                 <div id="ventanaingreso" style="width: 90%; justify-items: center;">
