@@ -17,10 +17,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;">
-    
-
-    
-
     <div style="display: flex; justify-content: center; margin-top: 3%; width: 230vh;">
         <div class="cuadroregistro" id="cuadroderegistro">
             <div class="cuadro50porcen"><!--INGRESO-->
@@ -38,6 +34,7 @@
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="Password" placeholder="Password">
                             <label for="Password">Password</label>
+                            <img src="{{ asset('img/ver_contrasenia.png') }}" alt="vistacontrasenia" id="vercontrasenia" class="btnvistacontrasenia" >
                         </div>
                     </div>
                     <div style = "display:flex; gap:5px; width: 80%;">
@@ -58,14 +55,20 @@
                         <div style="margin-bottom: 20px; text-align: center; color: white; font-weight: 600 ;">
                             <h3 style="color:#6ec7ec;">GEOLINK</h3>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="usuariorecuperacion" placeholder="usuariorecuperacion">
-                            <label for="usuariorecuperacion">Usuario Registrado</label>
-                        </div>
-                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
-                            <input type="email" class="form-control" id="correo_usuariorecuperacion" placeholder="* Correo">
+                        <div  id="inputcorreorecuperacion" class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important; margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                            <input type="text" class="form-control" id="correo_usuariorecuperacion" placeholder="* Correo">
                             <label for="correo_usuariorecuperacion">* Correo Registrado</label>
+                            <p class="textohv" style="display: none;">Ya tengo un codigo</p>
                         </div>
+                        <div id="inputcodigoderecuperacion" class="form-floating mb-3" style="display: none; padding: 0px !important; margin-bottom: 5px !important; margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                            <input type="text" class="form-control" id="codigorecuperacion" placeholder="* Codigo Recuperacion">
+                            <label for="codigorecuperacion">* Ingrese Codigo De Recuperacion enviado a tu correo.</label>
+                        </div>
+                            <small id="mensaje" style="display: none; color: white; gap: 8px;">
+                                <img src="{{ asset('img/aviso.png') }}" alt="alerta" style="width: 20px;"> Ingrese codigo de recuperacion enviado al correo.
+                            </small>
+                        
+                        
                         <div style="width: 80%; display: flex; align-items: self-end;">
                             <div style="width: 40%;">
                                 <p id='regresar' class="vinculos">Regresar</p>
@@ -74,7 +77,6 @@
                                 <input id="btnregistrosds" class="btn_ingreso" type="button" value="Registro">
                             </div>    
                         </div>
-
                     </div>
                 </div>
 
@@ -94,54 +96,74 @@
                 </div>
             </div>
             <div class="cuadro50porcen"><!--REGISTRO USUARIO-->
-            <div style="width: 90%; justify-items: center;">
-                        <div style="text-align: left; margin-bottom: 20px; color: white; font-weight: 600 ;">
-                            <h5 style="color:#6ec7ec;">REGISTRO GEOLIK</h5>
+                <div style="width: 90%; justify-items: center;">
+                            <div style="text-align: left; margin-bottom: 20px; color: white; font-weight: 600 ;">
+                                <h5 style="color:#6ec7ec;">REGISTRO GEOLIK</h5>
+                            </div>
+                        <div style="width: 80%">
+                            <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;">
+                                <input type="text" class="form-control" id="Nombre_usuario" placeholder="* Nombre Completo" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                                <label for="Nombre_usuario">* Nombre</label>
+                            </div>
                         </div>
-                    <div style="width: 80%">
-                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;">
-                            <input type="text" class="form-control" id="Nombre_usuario" placeholder="* Nombre Completo" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
-                            <label for="Nombre_usuario">* Nombre</label>
+                        <div style="width: 80%">
+                            <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                                <input type="text" class="form-control" id="usuario_registrado" placeholder="* Usuario">
+                                <label for="usuario_registrado">* Usuario</label>
+                            </div>
                         </div>
-                    </div>
-                    <div style="width: 80%">
-                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
-                            <input type="text" class="form-control" id="usuario_registrado" placeholder="* Usuario">
-                            <label for="usuario_registrado">* Usuario</label>
+                        <div style="width: 80%">
+                            <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                                <input type="email" class="form-control" id="correo_usuario" placeholder="* Correo">
+                                <label for="correo_usuario">* Correo</label>
+                            </div>
                         </div>
-                    </div>
-                    <div style="width: 80%">
-                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
-                            <input type="email" class="form-control" id="correo_usuario" placeholder="* Correo">
-                            <label for="correo_usuario">* Correo</label>
+                        <div style="width: 80%; ">
+                            <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                                <input type="password" class="form-control" id="Password_usuario" placeholder="* Contraseña">
+                                <label for="Password_usuario">* Contraseña</label>
+                                 <img src="{{ asset('img/ver_contrasenia.png') }}" alt="vistaPassword_usuario" id="vistaPassword_usuario" class="btnvistacontrasenia" >
+                            </div>
                         </div>
-                    </div>
-                    <div style="width: 80%; ">
-                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
-                            <input type="password" class="form-control" id="Password_usuario" placeholder="* Contraseña">
-                            <label for="Password_usuario">* Contraseña</label>
+                        <div style="width: 80%; ">
+                            <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
+                                <input type="password" class="form-control" id="Password_verificado" placeholder="* Verifique Contraseña">
+                                <label for="Password_verificado">* Verifique Contraseña</label>
+                                 <img src="{{ asset('img/ver_contrasenia.png') }}" alt="vistaPassword_usuario2" id="vistaPassword_usuario2" class="btnvistacontrasenia" >
+                            </div>
                         </div>
-                    </div>
-                    <div style="width: 80%; ">
-                        <div class="form-floating mb-3" style="padding: 0px !important; margin-bottom: 5px !important;" style="margin-bottom: 0px !important; padding-bottom: 9px !important;">
-                            <input type="password" class="form-control" id="Password_verificado" placeholder="* Verifique Contraseña">
-                            <label for="Password_verificado">* Verifique Contraseña</label>
+                        <div style="width: 80%; display: flex; align-items: self-end;">
+                            <div style="width: 40%;">
+                                <p id='yatengousuario' class="vinculos">Ya Tengo Usuario</p>
+                            </div>
+                            <div style="width: 60%; text-align: center; margin-top:25px;">
+                                <input id="btnregistro" class="btn_ingreso" type="button" value="Registro">
+                            </div>    
                         </div>
-                    </div>
-                    <div style="width: 80%; display: flex; align-items: self-end;">
-                        <div style="width: 40%;">
-                            <p id='yatengousuario' class="vinculos">Ya Tengo Usuario</p>
-                        </div>
-                        <div style="width: 60%; text-align: center; margin-top:25px;">
-                            <input id="btnregistro" class="btn_ingreso" type="button" value="Registro">
-                        </div>    
-                    </div>
-                    
-                    
+                        
+                        
 
+                    </div>
                 </div>
             </div>
-        </div>
+            <div id="divneuvacontrase" class="cuadrocontrasenia">
+                <div style="margin-top: 2%;">
+                    <h3 class="titulorecucontrasenia">Ingrese Contraseña Nueva</h3>
+                </div>
+                <div class="form-floating mb-3" style="width: 60%;">
+                    <input type="password" class="form-control" id="recuperacionPassword" placeholder="Nuevo Password" >
+                    <label for="recuperacionPassword">Contraseña</label>
+                     <img src="{{ asset('img/ver_contrasenia.png') }}" alt="verrecuperacionPassword" id="verrecuperacionPassword" class="btnvistacontrasenia" >
+                </div>
+                <div class="form-floating mb-3" style="width: 60%;">
+                    <input type="password" class="form-control" id="recuperacionPassword2" placeholder="Nuevo Password" >
+                    <label for="recuperacionPassword2">Verifique Contraseña</label>
+                     <img src="{{ asset('img/ver_contrasenia.png') }}" alt="verrecuperacionPassword2" id="verrecuperacionPassword2" class="btnvistacontrasenia" >
+                </div>
+                <div style="width: 60%;">
+                    <input id="btnnuevopass" class="btn_ingreso" type="button" value="Aceptar">
+                </div>
+            </div>
         <div>
 
         </div>
@@ -153,18 +175,31 @@
 
 <script>
 
+
+
+
 $('#recuperadorcontrasenia, #regresar').click(function (){
 
     const ventanaingreso = $('#ventanaingreso')
     const ventanarecuperacion = $('#ventanarecuperacion')
 
-    const recuperadorcontrasenia = $('#recuperadorcontrasenia')
+    const inputcorreorecuperacion = $('#inputcorreorecuperacion')
+    const inputcodigoderecuperacion = $('#inputcodigoderecuperacion')
+    const mensaje = $('#mensaje')
+    const btnregistrosds = $('#btnregistrosds')
 
+    inputcorreorecuperacion.css('display','block')
+    inputcodigoderecuperacion.css('display','none')
+    mensaje.css('display','none')
+    btnregistrosds.val('Registro')
+
+    
     if(ventanaingreso.css('display') === 'none'){
         
         ventanarecuperacion.css('opacity',0)
         ventanarecuperacion.toggleClass('girar')
         ventanaingreso.removeClass('girar')
+        
         
 
         setTimeout(() => {

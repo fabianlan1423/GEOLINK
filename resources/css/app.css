@@ -1389,3 +1389,49 @@ body {
     transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
 }
+
+
+
+
+/*Texto de hipervinculos*/
+
+.textohv{
+    color: white;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.cuadrocontrasenia {
+    position: absolute;
+    background: rgba(136, 136, 136, 0.37);
+    width: 40%;
+    height: 35%;
+    text-align: center;
+    justify-items: center;
+    margin-top: 4%;
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    border-radius: solid 1px;
+    display: none;
+
+}
+
+.titulorecucontrasenia {
+    font-family: math;
+    color: white;
+    font-weight: 700;
+}
+
+.leaflet-left{
+    margin-left: 95%;
+
+}
+
+.btnvistacontrasenia{
+    width: 30px;
+    position: absolute;
+    margin-top: -35px;
+    justify-self: flex-end;
+    margin-right: 10px;
+    cursor: pointer;
+}

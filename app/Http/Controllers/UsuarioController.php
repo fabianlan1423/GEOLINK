@@ -16,7 +16,7 @@ class UsuarioController extends Controller
             'usuario' => $request->usuario_registrado,
             'nombre' => $request->nombre,
             'correo' => $request->correo,
-            'contraseña' => Hash::make($request->contrasenia1)
+            'contrasenia' => Hash::make($request->contrasenia1)
 
 
         ]);
@@ -56,14 +56,18 @@ class UsuarioController extends Controller
 
 
     public function consultausuario(Request $request){
+        
 
         $usuario = DB::table('registro_users')
             ->where('correo', $request->correo)
+            ->orwhere('usuario', $request->user)
             ->exists();
 
             return response()->json([
                 'existe' => $usuario
             ]);
+
+            
 
        
     }
@@ -73,7 +77,7 @@ class UsuarioController extends Controller
             ->where('usuario', $request->usuario)
             ->first();
 
-        if($usuario && Hash::check($request->password, $usuario->contraseña)){
+        if($usuario && Hash::check($request->password, $usuario->contrasenia)){
 
             session([
                 'usuario' => $usuario->nombre

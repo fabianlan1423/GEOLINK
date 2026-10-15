@@ -6,6 +6,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\cargadatoscontroller;
 use App\Http\Controllers\consultamasiva;
 use App\Http\Controllers\RutaController;
+use App\Http\Controllers\correo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use PhpParser\Node\Stmt\Return_;
@@ -136,6 +137,22 @@ Route::post('/limpiatabla',
 );
 Route::post('/exportaarchivo', 
     [consultamasiva::class, 'exportarRespuestaCsv']
+);
+
+
+// elementos de correo enviado
+
+Route::post('/enviar-correo',
+     [correo::class, 'enviarCorreo']
+);
+Route::post('/consuluser',
+     [correo::class, 'recuperacioncontrasenia']
+);
+Route::post('/consultarecupearacion',
+     [correo::class, 'codrecuperacioncontrasenia']
+);
+Route::post('/recupass',
+     [correo::class, 'nuevacontrasenia']
 );
 
 

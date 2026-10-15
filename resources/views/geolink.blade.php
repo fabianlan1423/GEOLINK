@@ -77,12 +77,12 @@
                         </span>
                     </div>
                     <div class="botonselectmaps">
-                        <span class="titlemodif" data-tooltip="Consulta Por Coordenada">
+                        <span class="titlemodif" data-tooltip="Consulta Por Direccion">
                             <img id="iconodedireccion" src="{{ asset('img/busquedadireccion.png')}}" alt="iconodedireccion" class="imgbtnmaps titlemodif" data-tooltip1="Consulta Por Direccion">
                         </span>
                     </div>
                     <div class="botonselectmaps">
-                        <span class="titlemodif" data-tooltip="Consulta Por Coordenada">
+                        <span class="titlemodif" data-tooltip="Exportar Consulta">
                             <img id="iconoexportexcel" src="{{ asset('img/export_excel.png')}}" alt="iconoexportexcel" class="imgbtnmaps titlemodif" data-tooltip2="Exportar Consulta Realizada">
                         </span>
                     </div>
